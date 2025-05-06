@@ -48,7 +48,7 @@ This repository contains:
 
 ---
 
-## 📈 Assignment Progress Log
+## Assignment Progress Log
 
 ###  Assignment 1 – Versions, Releases, and Containerization
 
