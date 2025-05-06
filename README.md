@@ -49,7 +49,7 @@ This repository contains:
 
 - All required repositories created in the team GitHub organization
 - `lib-ml` and `lib-version` are implemented, versioned via `VERSION.txt`, and installable through GitHub tag
-- Training script uses `lib-ml` for preprocessing; model is saved and versioned
+- Training script uses `lib-ml` for preprocessing; model is saved and versioned, and its tag is passed as an environmental variable
 - `model-service` serves a trained model using a REST API
 - `app` queries the model-service and uses `lib-version` to show version info
 - GitHub Actions workflows created:
