@@ -15,3 +15,8 @@ Approved PR: https://github.com/remla25-team22/app-frontend/pull/1
 Approved PR: https://github.com/remla25-team22/lib-version/pull/1
 
 Approved PR: https://github.com/remla25-team22/model-training/pull/2
+
+Approved PR: https://github.com/remla25-team22/model-service/pull/2
+
+Approved PR: https://github.com/remla25-team22/model-service/pull/1
+
