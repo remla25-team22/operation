@@ -1,0 +1,23 @@
+services:
+  model-service:
+    image: ghcr.io/remla25-team22/model-service:1.0.1 
+    container_name: model-service
+    environment:
+      - MODEL_TAG=v1.0.1
+    ports:
+      - "8081:8080" 
+    networks:
+      - appnet
+
+  app-service:
+    image: ghcr.io/remla25-team22/app-service:v1.0.2
+    container_name: app-service
+    ports:
+      - "8080:8080"  
+    networks:
+      - appnet
+    depends_on:
+      - model-service
+
+networks:
+  appnet:
