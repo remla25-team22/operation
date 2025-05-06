@@ -12,16 +12,11 @@ This repository contains the deployment and setup for our Restaurant Sentiment A
 
 ### Running the application
 
-(TODO)
-
-The app-service will be available at: [http://localhost:8080](http://localhost:8080)
-
-### Configuration Parameters (TODO)
-
-| Variable             | Description                                          |
-|----------------------|------------------------------------------------------|
-| `APP_VERSION`        | Optional: can be printed via `lib-version`          |
-| `MODEL_VERSION`      | Optional: fixed or dynamic depending on workflow     |
+1. Open terminal in operation (this folder)
+2. Run `docker compose up`
+3. Using any browser, navigate to [http://localhost:8080/index.html](http://localhost:8080/index.html)
+4. Insert a review into the text box (i.e. "The selection on the menu was great and so were the prics.")
+5. Press send to get sentiment prediction
 
 ---
 
