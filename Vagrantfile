@@ -1,4 +1,3 @@
-
 WORKER_COUNT = 2
 WORKER_CPUS = 2
 WORKER_RAM = 6144
@@ -21,6 +20,9 @@ Vagrant.configure("2") do |config|
     ctrl.vm.provision "ansible" do |ansible|
       ansible.playbook = "playbooks/ctrl.yaml"
       ansible.inventory_path = "inventory.cfg"
+      ansible.extra_vars = {
+        worker_count: WORKER_COUNT
+      }
     end
   end
 
@@ -35,6 +37,9 @@ Vagrant.configure("2") do |config|
       node.vm.provision "ansible" do |ansible|
         ansible.playbook = "playbooks/node.yaml"
         ansible.inventory_path = "inventory.cfg"
+        ansible.extra_vars = {
+          worker_count: WORKER_COUNT
+        }
       end
     end
   end
