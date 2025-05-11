@@ -10,15 +10,23 @@
         regexp: '^.*swap.*$'
         state: absent
 
-    - name: Load required kernel modules
+    - name: Load required kernel modules for future reboots
       copy:
         dest: /etc/modules-load.d/k8s.conf
         content: |
           overlay
           br_netfilter
 
+    - name: Load kernel modules now
+      community.general.modprobe:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - br_netfilter
+        - overlay
+
     - name: Apply sysctl settings
-      sysctl:
+      ansible.posix.sysctl:
         name: "{{ item.name }}"
         value: "{{ item.value }}"
         state: present
