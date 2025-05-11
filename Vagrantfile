@@ -1,0 +1,41 @@
+
+WORKER_COUNT = 2
+WORKER_CPUS = 2
+WORKER_RAM = 6144
+
+CTRL_CPUS = 1
+CTRL_RAM = 4096
+
+NET_PREFIX = "192.168.56"
+
+Vagrant.configure("2") do |config|
+  config.vm.box = "bento/ubuntu-24.04"
+
+  config.vm.define "ctrl" do |ctrl|
+    ctrl.vm.hostname = "ctrl"
+    ctrl.vm.network "private_network", ip: "#{NET_PREFIX}.100"
+    ctrl.vm.provider "virtualbox" do |vb|
+      vb.memory = CTRL_RAM
+      vb.cpus = CTRL_CPUS
+    end
+    ctrl.vm.provision "ansible" do |ansible|
+      ansible.playbook = "playbooks/ctrl.yaml"
+      ansible.inventory_path = "inventory.cfg"
+    end
+  end
+
+  (1..WORKER_COUNT).each do |i|
+    config.vm.define "node-#{i}" do |node|
+      node.vm.hostname = "node-#{i}"
+      node.vm.network "private_network", ip: "#{NET_PREFIX}.#{100 + i}"
+      node.vm.provider "virtualbox" do |vb|
+        vb.memory = WORKER_RAM
+        vb.cpus = WORKER_CPUS
+      end
+      node.vm.provision "ansible" do |ansible|
+        ansible.playbook = "playbooks/node.yaml"
+        ansible.inventory_path = "inventory.cfg"
+      end
+    end
+  end
+end

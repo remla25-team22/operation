@@ -1,0 +1,6 @@
+- import_playbook: general.yaml
+- hosts: ctrl
+  become: yes
+  tasks:
+    - name: Controller-specific setup
+      debug: msg="Running ctrl-specific tasks"
