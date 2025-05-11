@@ -20,6 +20,66 @@ This repository contains the deployment and setup for our Restaurant Sentiment A
 
 ---
 
+###  Running the Kubernetes Cluster (Assignment 2)
+
+#### Prerequisites
+- VirtualBox
+- Vagrant
+- Ansible
+
+#### Starting the cluster
+
+```bash
+vagrant up --provision
+```
+
+This will:
+- Create one controller VM (`ctrl`)
+- Create multiple worker VMs (`node-1`, `node-2`, ...)
+- Run Ansible playbooks to provision the full cluster
+
+#### Reprovision the cluster
+
+```bash
+vagrant provision
+```
+
+#### Stop the cluster
+
+```bash
+vagrant halt
+```
+
+#### Destroy all VMs
+
+```bash
+vagrant destroy -f
+```
+
+---
+
+###  SSH Access
+
+After provisioning, each team member can SSH into any VM using their registered SSH key:
+
+#### Student 1 (from host machine):
+
+```bash
+ssh -i ~/.ssh/student1 vagrant@192.168.56.100
+```
+
+#### Student 2:
+
+```bash
+ssh -i ~/.ssh/student2 vagrant@192.168.56.101
+```
+
+> For more nodes, replace the IP with the correct node (`192.168.56.102`, etc.)
+
+ No password is required if the public key is registered.
+
+---
+
 ##  Project Structure & Pointers
 
 This repository contains:
@@ -79,3 +139,7 @@ Each repository includes a `README.md`, tagged release, and is public for peer r
 ##  Activity Log
 
 See [ACTIVITY.md](./ACTIVITY.md) for individual contributions, PR links, and approvals.
+
+
+---
+
