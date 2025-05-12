@@ -1,0 +1,6 @@
+- import_playbook: general.yaml
+- hosts: nodes
+  become: yes
+  tasks:
+    - name: Node-specific setup
+      debug: msg="Running node-specific tasks"

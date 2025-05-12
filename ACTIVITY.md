@@ -58,3 +58,9 @@ Approved PR: https://github.com/remla25-team22/lib-ml/pull/2
  - docker compose
      - setup workign docker-compose.yml
 - reviewed [PR on model-training](https://github.com/remla25-team22/model-training/pull/1)
+
+# A2:
+
+-- Ibrahim Badr: --
+
+Created PR: https://github.com/remla25-team22/operation/pull/2
