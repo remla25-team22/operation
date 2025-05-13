@@ -133,7 +133,7 @@ Each repository includes a `README.md`, tagged release, and is public for peer r
   - Register multiple students' SSH keys using a loop over the `ssh_keys/` folder
 - Used a dynamic Jinja2 template (`hosts.j2`) to generate `/etc/hosts` based on the number of worker nodes passed via `ansible.extra_vars`
 - Ensured provisioning is idempotent and completes in under 5 minutes.
-
+- Successfully implemented and validated all provisioning tasks through step 19 of the assignment.
 ---
 
 ##  Activity Log
