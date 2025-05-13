@@ -9,3 +9,5 @@ __pycache__/
 *.tar.gz
 *.zip
 .env
+
+admin.conf

@@ -15,10 +15,19 @@
         kubeadm init \
           --apiserver-advertise-address=192.168.56.100 \
           --node-name=ctrl \
-          --pod-network-cidr=10.244.0.0/16
+          --pod-network-cidr=10.244.0.0/16 \
+          --ignore-preflight-errors=NumCPU
       when: not kube_init.stat.exists
 
-    - name: Copy admin.conf to vagrant user’s kube config dir
+    - name: Make cube dir
+      ansible.builtin.file:
+        path: /home/vagrant/.kube
+        state: directory
+        owner: vagrant
+        group: vagrant
+        mode: '0700'
+
+    - name: Copy admin.conf to vagrant user kube config dir
       ansible.builtin.copy:
         src: /etc/kubernetes/admin.conf
         dest: /home/vagrant/.kube/config
