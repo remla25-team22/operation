@@ -4,3 +4,43 @@
   tasks:
     - name: Controller-specific setup
       debug: msg="Running ctrl-specific tasks"
+    
+    - name: Check if Kubernetes is initialized
+      ansible.builtin.stat:
+        path: /etc/kubernetes/admin.conf
+      register: kube_init
+
+    - name: Initialize Kubernetes controller with kubeadm if not initialized
+      ansible.builtin.shell: |
+        kubeadm init \
+          --apiserver-advertise-address=192.168.56.100 \
+          --node-name=ctrl \
+          --pod-network-cidr=10.244.0.0/16 \
+          --ignore-preflight-errors=NumCPU
+      when: not kube_init.stat.exists
+
+    - name: Make cube dir
+      ansible.builtin.file:
+        path: /home/vagrant/.kube
+        state: directory
+        owner: vagrant
+        group: vagrant
+        mode: '0700'
+
+    - name: Copy admin.conf to vagrant user kube config dir
+      ansible.builtin.copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /home/vagrant/.kube/config
+        owner: vagrant
+        group: vagrant
+        mode: '0600'
+        remote_src: yes
+
+    - name: Copy kube config to synced folder for host access
+      ansible.builtin.copy:
+        src: /etc/kubernetes/admin.conf
+        dest: /vagrant/admin.conf
+        owner: vagrant
+        group: vagrant
+        mode: '0644'
+        remote_src: yes
