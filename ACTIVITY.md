@@ -72,6 +72,10 @@ Approved PR: https://github.com/remla25-team22/operation/pull/3
 
 Created PR: https://github.com/remla25-team22/operation/pull/4
 
+-- Subin Lee: --
+ - operation
+     - Applied step 18-19
+
 ### Jasper Vos
  - operation
      - Applied step 8 through 14
