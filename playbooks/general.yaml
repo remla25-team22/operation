@@ -78,7 +78,9 @@
         state: present
 
     - name: "Create a directory for containerd config"
-      file: path=/etc/containerd state=directory
+      file: 
+        path: /etc/containerd 
+        state: directory
 
     - name: Generate default containerd config
       ansible.builtin.shell: containerd config default > /etc/containerd/config.toml

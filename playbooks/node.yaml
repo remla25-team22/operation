@@ -3,22 +3,21 @@
 - hosts: nodes
   become: yes
   tasks:
-    - name: Get kubeadm join command from controller
-      shell: kubeadm token create --print-join-command
-      delegate_to: ctrl         
-      register: join_command
-      changed_when: false
 
-    - name: Check whether this node is already part of the cluster
-      stat:
-        path: /etc/kubernetes/kubelet.conf   =
+    - name: Check if node is already joined
+      ansible.builtin.stat:
+        path: /etc/kubernetes/kubelet.conf
       register: kubelet_conf
 
+    - name: Generate Join Command on controller
+      ansible.builtin.shell: kubeadm token create --print-join-command
+      register: join_command
+      delegate_to: ctrl
+      run_once: true
+      changed_when: false
+      when: not kubelet_conf.stat.exists
+
     - name: Join the Kubernetes cluster
-      shell: >
-        {{ join_command.stdout }}                      
-        --cri-socket unix:///run/containerd/containerd.sock 
-      args:
-        warn: false
-      when: not kubelet_conf.stat.exists    # idempotent: run only once
+      ansible.builtin.shell: "{{ join_command.stdout }}"
+      when: not kubelet_conf.stat.exists
 
