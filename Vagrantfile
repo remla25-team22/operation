@@ -8,21 +8,33 @@ CTRL_RAM = 4096
 NET_PREFIX = "192.168.56"
 
 Vagrant.configure("2") do |config|
+  NET_PREFIX  = "192.168.56"
+  CTRL_RAM    = 4096
+  CTRL_CPUS   = 2
+  WORKER_COUNT = 2
+
   config.vm.box = "bento/ubuntu-24.04"
 
   config.vm.define "ctrl" do |ctrl|
     ctrl.vm.hostname = "ctrl"
-    ctrl.vm.network "private_network", ip: "#{NET_PREFIX}.100"
+    ctrl.vm.network  "private_network", ip: "#{NET_PREFIX}.100"
+
     ctrl.vm.provider "virtualbox" do |vb|
       vb.memory = CTRL_RAM
-      vb.cpus = CTRL_CPUS
+      vb.cpus   = CTRL_CPUS
     end
+
+    # ──► kick the host-only NIC alive once, before Ansible runs
+    ctrl.vm.provision "shell", run: "once", inline: <<-SHELL
+      echo "Pinging host-only gateway to wake the link…"
+      ping -c1 192.168.56.1 || true
+    SHELL
+
+    # your real configuration playbook
     ctrl.vm.provision "ansible" do |ansible|
-      ansible.playbook = "playbooks/ctrl.yaml"
-      ansible.inventory_path = "inventory.cfg"
-      ansible.extra_vars = {
-        worker_count: WORKER_COUNT
-      }
+      ansible.playbook        = "playbooks/ctrl.yaml"
+      ansible.inventory_path  = "inventory.cfg"
+      ansible.extra_vars      = { worker_count: WORKER_COUNT }
     end
   end
 
