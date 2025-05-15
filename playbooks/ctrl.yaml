@@ -43,7 +43,7 @@
         owner: vagrant
         group: vagrant
         mode: '0644'
-        remote_src: yes
+        remote_src: yes 
 
     - name: Copy flannel manifset
       ansible.builtin.copy:
@@ -72,3 +72,8 @@
         name: helm
         state: present
         update_cache: yes
+
+    - name: Add helm-diff
+      ansible.builtin.command: helm plugin install https://github.com/databus23/helm-diff
+      args:
+        creates: "{{ ansible_env.HOME }}/.local/share/helm/plugins/helm-diff"
