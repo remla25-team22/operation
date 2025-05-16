@@ -1,3 +1,16 @@
+---
+
+- name: Wait until every node is reachable on its static IP
+  hosts: all
+  gather_facts: false
+  tasks:
+    - name: wait for SSH to answer
+      wait_for_connection:
+        delay: 5         # seconds to wait before first try
+        timeout: 180     # abort after 3 minutes
+
+
+
 - import_playbook: general.yaml
 - hosts: ctrl
   become: yes

@@ -1,9 +1,7 @@
 - import_playbook: general.yaml
-
 - hosts: nodes
   become: yes
   tasks:
-
     - name: Check if node is already joined
       ansible.builtin.stat:
         path: /etc/kubernetes/kubelet.conf
@@ -20,4 +18,3 @@
     - name: Join the Kubernetes cluster
       ansible.builtin.shell: "{{ join_command.stdout }}"
       when: not kubelet_conf.stat.exists
-
