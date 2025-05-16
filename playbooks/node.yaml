@@ -1,24 +1,6 @@
 - import_playbook: general.yaml
-
 - hosts: nodes
   become: yes
   tasks:
-    - name: Get kubeadm join command from controller
-      shell: kubeadm token create --print-join-command
-      delegate_to: ctrl         
-      register: join_command
-      changed_when: false
-
-    - name: Check whether this node is already part of the cluster
-      stat:
-        path: /etc/kubernetes/kubelet.conf   =
-      register: kubelet_conf
-
-    - name: Join the Kubernetes cluster
-      shell: >
-        {{ join_command.stdout }}                      
-        --cri-socket unix:///run/containerd/containerd.sock 
-      args:
-        warn: false
-      when: not kubelet_conf.stat.exists    # idempotent: run only once
-
+    - name: Node-specific setup
+      debug: msg="Running node-specific tasks"
