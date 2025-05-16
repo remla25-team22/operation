@@ -78,32 +78,29 @@
         state: present
 
     - name: "Create a directory for containerd config"
-      file: path=/etc/containerd state=directory
+      file: 
+        path: /etc/containerd 
+        state: directory
 
     - name: Generate default containerd config
       ansible.builtin.shell: containerd config default > /etc/containerd/config.toml
       args:
         creates: /etc/containerd/config.toml
-
-    - name: set disable_apparmor in containerd config
-      ansible.builtin.lineinfile:
-        path: /etc/containerd/config.toml
-        search_string: 'disable_apparmor ='
-        line: '    disable_apparmor = true'
             
-    - name: set sandbox_image in containerd config
-      ansible.builtin.lineinfile:
+    - name: Set containerd lines 
+      ansible.builtin.replace:
         path: /etc/containerd/config.toml
-        search_string: 'sandbox_image ='
-        line: '    sandbox_image = "registry.k8s.io/pause:3.10"'
-            
-    - name: set SystemdCgroud in containerd config
-      ansible.builtin.lineinfile:
-        path: /etc/containerd/config.toml
-        search_string: 'SystemdCgroup ='
-        line: '            SystemdCgroup = true'
-    
-    - name: Restart containerd to apply config
+        regexp: "{{ item.regexp }}"
+        replace: "{{ item.replace }}"
+      loop:
+      - regexp: '(^\s*disable_apparmor\s*=\s*)(?!true\b)(\S+)'
+        replace: '\1true'
+      - regexp: '(^\s*sandbox_image\s*=\s*)(?!"registry\.k8s\.io\/pause:3\.10")(\S+)'
+        replace: '\1"registry.k8s.io/pause:3.10"'
+      - regexp: '(^\s*SystemdCgroup\s*=\s*)(?!true\b)(\S+)'
+        replace: '\1true'
+      
+    - name: Restart containerd
       ansible.builtin.service:
         name: containerd
         state: restarted
@@ -114,3 +111,4 @@
         name: kubelet
         state: started
         enabled: yes
+    

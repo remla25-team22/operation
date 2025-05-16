@@ -2,5 +2,19 @@
 - hosts: nodes
   become: yes
   tasks:
-    - name: Node-specific setup
-      debug: msg="Running node-specific tasks"
+    - name: Check if node is already joined
+      ansible.builtin.stat:
+        path: /etc/kubernetes/kubelet.conf
+      register: kubelet_conf
+
+    - name: Generate Join Command on controller
+      ansible.builtin.shell: kubeadm token create --print-join-command
+      register: join_command
+      delegate_to: ctrl
+      run_once: true
+      changed_when: false
+      when: not kubelet_conf.stat.exists
+
+    - name: Join the Kubernetes cluster
+      ansible.builtin.shell: "{{ join_command.stdout }}"
+      when: not kubelet_conf.stat.exists

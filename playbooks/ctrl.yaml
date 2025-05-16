@@ -56,4 +56,37 @@
         owner: vagrant
         group: vagrant
         mode: '0644'
-        remote_src: yes
+        remote_src: yes 
+
+    - name: Copy flannel manifset
+      ansible.builtin.copy:
+        src: ../kube-flannel.yml
+        dest: /tmp/kube-flannel.yml
+        mode: '0644'
+    
+    - name: Apply flannel network manifest
+      ansible.builtin.command: kubectl apply -f /tmp/kube-flannel.yml
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
+    - name: Add Helm signing key
+      ansible.builtin.apt_key:
+        url: https://baltocdn.com/helm/signing.asc
+        state: present
+
+    - name: Add Helm apt repository
+      ansible.builtin.apt_repository:
+        repo: deb https://baltocdn.com/helm/stable/debian/ all main
+        filename: helm
+        state: present
+
+    - name: Install Helm
+      ansible.builtin.apt:
+        name: helm
+        state: present
+        update_cache: yes
+
+    - name: Add helm-diff
+      ansible.builtin.command: helm plugin install https://github.com/databus23/helm-diff
+      args:
+        creates: "{{ ansible_env.HOME }}/.local/share/helm/plugins/helm-diff"
