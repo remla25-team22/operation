@@ -46,6 +46,7 @@ Vagrant.configure("2") do |config|
         vb.memory = WORKER_RAM
         vb.cpus = WORKER_CPUS
       end
+      node.vm.provision "shell", inline: "sleep 10", run: "always"
       node.vm.provision "ansible" do |ansible|
         ansible.playbook = "playbooks/node.yaml"
         ansible.inventory_path = "inventory.cfg"
