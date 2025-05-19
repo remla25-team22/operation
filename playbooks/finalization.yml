@@ -1,0 +1,55 @@
+---
+- name: Finalize Kubernetes setup
+  hosts: ctrl
+  become: true
+  gather_facts: false
+
+  tasks:
+    - name: Copy MetalLB CRD manifest to remote
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/metallb-native.yaml"
+        dest: /tmp/metallb-native.yaml
+        owner: vagrant
+        mode: '0644'
+
+    - name: Apply MetalLB CRDs
+      ansible.builtin.command: kubectl apply -f /tmp/metallb-native.yaml
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
+
+
+    - name: Create MetalLB IPAddressPool
+      kubernetes.core.k8s:
+        kubeconfig: "~{{ansible_user}}/.kube/config"
+        state: present
+        definition: |
+          apiVersion: metallb.io/v1beta1
+          kind: IPAddressPool
+          metadata:
+            name: default-pool
+            namespace: metallb-system
+          spec:
+            addresses:
+              - 192.168.56.80-192.168.56.90          # ← full start-end IPs
+
+    - name: Create MetalLB L2Advertisement
+      kubernetes.core.k8s:
+        kubeconfig: "~{{ansible_user}}/.kube/config"
+        state: present
+        definition: |
+          apiVersion: metallb.io/v1beta1
+          kind: L2Advertisement
+          metadata:
+            name: default-l2adv
+            namespace: metallb-system
+          spec: {}
+
+    - name: Wait for MetalLB controller to be ready
+      ansible.builtin.shell: >-
+        kubectl wait -n metallb-system -l app=metallb,component=controller \
+        --for=condition=ready pod --timeout=60s
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+        
+
