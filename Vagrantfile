@@ -23,7 +23,14 @@ Vagrant.configure("2") do |config|
       vb.memory = CTRL_RAM
       vb.cpus   = CTRL_CPUS
     end
-
+    
+    # ──► kick the host-only NIC alive once, before Ansible runs
+    ctrl.vm.provision "shell", run: "once", inline: <<-SHELL
+      echo "Pinging host-only gateway to wake the link…"
+      ping -c1 192.168.56.1 || true
+    SHELL
+    
+    
     # your real configuration playbook
     ctrl.vm.provision "ansible" do |ansible|
       ansible.playbook        = "playbooks/ctrl.yaml"

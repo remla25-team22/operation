@@ -75,6 +75,7 @@
           - kubelet=1.32.4-1.1
           - kubeadm=1.32.4-1.1
           - kubectl=1.32.4-1.1
+          - python3-kubernetes=22.6.0-2
         state: present
 
     - name: "Create a directory for containerd config"
