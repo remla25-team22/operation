@@ -10,7 +10,7 @@ services:
       - appnet
 
   app-service:
-    image: ghcr.io/remla25-team22/model-service:1.1.0
+    image: ghcr.io/remla25-team22/app-service:v1.1.0
     container_name: app-service
     ports:
       - "8080:8080"  
