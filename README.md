@@ -137,6 +137,15 @@ Each repository includes a `README.md`, tagged release, and is public for peer r
 - Successfully implemented and validated all provisioning tasks through step 19 of the assignment.
 ---
 
+### Assignment 3
+
+- Setup helm 
+- Setup monitoring
+- Setup Grafana
+
+Unfortunately, we were unable to tie everything together as of yet (we experienced a lot of issues with the setup of assignment 2). to get a preview of the app, run `docker compose up` and navigate to localhost:8080/index.html, to access grafana, navigate to localhost:3000
+
+
 ##  Activity Log
 
 See [ACTIVITY.md](./ACTIVITY.md) for individual contributions, PR links, and approvals.
