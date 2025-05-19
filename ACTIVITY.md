@@ -88,3 +88,4 @@ Created PR: https://github.com/remla25-team22/operation/pull/4
 
 Created PR: https://github.com/remla25-team22/operation/pull/7
 
+Approved PR: https://github.com/remla25-team22/operation/pull/8
