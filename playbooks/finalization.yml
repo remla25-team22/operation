@@ -52,4 +52,28 @@
       environment:
         KUBECONFIG: /etc/kubernetes/admin.conf
         
+    - name: Add ingress-nginx Helm repo
+      kubernetes.core.helm_repository:
+        name: ingress-nginx
+        repo_url: https://kubernetes.github.io/ingress-nginx
+
+    - name: Install / upgrade NGINX Ingress Controller
+      kubernetes.core.helm:
+        name: ingress-nginx               # Helm release name
+        chart_ref: ingress-nginx/ingress-nginx
+        release_namespace: ingress-nginx  # target namespace
+        create_namespace: true
+        kubeconfig: /etc/kubernetes/admin.conf
+        values:
+          controller:
+            service:
+              loadBalancerIP: 192.168.56.91
+            ingressClassResource:
+              name: nginx
+              default: true
+      register: ingress_release
+
+    - name: Show ingress-nginx release output
+      debug:
+        var: ingress_release.stdout
 
