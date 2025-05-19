@@ -1,20 +1,28 @@
 - import_playbook: general.yaml
+
 - hosts: nodes
   become: yes
   tasks:
     - name: Check if node is already joined
-      ansible.builtin.stat:
+      stat:
         path: /etc/kubernetes/kubelet.conf
       register: kubelet_conf
 
     - name: Generate Join Command on controller
-      ansible.builtin.shell: kubeadm token create --print-join-command
+      shell: kubeadm token create --print-join-command
       register: join_command
       delegate_to: ctrl
       run_once: true
       changed_when: false
       when: not kubelet_conf.stat.exists
 
+    - name: Wait for API server to become reachable on controller
+      wait_for:
+        host: "{{ hostvars['ctrl'].ansible_host | default('192.168.56.100') }}"
+        port: 6443
+        timeout: 90
+      when: not kubelet_conf.stat.exists
+
     - name: Join the Kubernetes cluster
-      ansible.builtin.shell: "{{ join_command.stdout }}"
+      shell: "{{ join_command.stdout }}"
       when: not kubelet_conf.stat.exists
