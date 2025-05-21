@@ -1,10 +1,19 @@
-# A1:
+# Week 2
+## A1:
 
 -- Ibrahim Badr: --
 
 Created PR: https://github.com/remla25-team22/lib-ml/pull/1
 
 Created PR: https://github.com/remla25-team22/lib-ml/pull/2
+
+-- Jasper Vos: --
+
+- reviewed [PR on model-training](https://github.com/remla25-team22/model-training/pull/1)
+
+# Week 3
+## A1:
+-- Ibrahim Badr: --
 
 Created PR: https://github.com/remla25-team22/model-training/pull/1
 
@@ -23,9 +32,7 @@ Approved PR: https://github.com/remla25-team22/model-service/pull/1
 Approved PR: https://github.com/remla25-team22/lib-ml/pull/4
 
 
-
 -- Parviz Ahmadov: --
-
 Created PR: https://github.com/remla25-team22/lib-ml/pull/3
 
 Created PR: https://github.com/remla25-team22/lib-ml/pull/4
@@ -43,7 +50,7 @@ Approved PR: https://github.com/remla25-team22/lib-ml/pull/1
 Approved PR: https://github.com/remla25-team22/lib-ml/pull/2
 
 
-### Jasper Vos
+-- Jasper Vos: --
  - app-service
      - setup of codebase
      - setup corresponding build & release pipeline
@@ -57,39 +64,73 @@ Approved PR: https://github.com/remla25-team22/lib-ml/pull/2
      - moving of files to wwwroot of app-service, as to fit single image
  - docker compose
      - setup workign docker-compose.yml
-- reviewed [PR on model-training](https://github.com/remla25-team22/model-training/pull/1)
 
-# A2:
 
+## A2:
 -- Ibrahim Badr: --
 
 Created PR: https://github.com/remla25-team22/operation/pull/2
 
-Approved PR: https://github.com/remla25-team22/operation/pull/3
 
+-- Jasper Vos: --
+
+Approve [PR 2](https://github.com/remla25-team22/operation/pull/2)
+
+
+# Week 4
+
+## A2
+
+-- Ibrahim Badr: --
+
+Approved PR: https://github.com/remla25-team22/operation/pull/3
 
 -- Parviz Ahmadov: --
 
 Created PR: https://github.com/remla25-team22/operation/pull/4
 
+-- Jasper Vos: --
+
+Create [pr 3](https://github.com/remla25-team22/operation/pull/3)
+
+
 -- Subin Lee: --
  - operation
-     - Applied step 18-19
+ -- Applied step 18-19
 
-### Jasper Vos
- - operation
-     - Applied step 8 through 14
-     - Create [pr 3](https://github.com/remla25-team22/operation/pull/3)
-     - Approve [PR 2](https://github.com/remla25-team22/operation/pull/2)
-  
-# A3:
+
+
+
+## A3
 
 -- Ibrahim Badr: --
 
 Created PR: https://github.com/remla25-team22/operation/pull/7
 
-Approved PR: https://github.com/remla25-team22/operation/pull/8
 
+-- Jasper Vos: --
+
+Approve [PR 2](https://github.com/remla25-team22/operation/pull/2)
+
+
+-- Parviz Ahmadov: --
+
+Created PR: https://github.com/remla25-team22/operation/pull/6
+
+Approved PR: https://github.com/remla25-team22/operation/pull/7
+
+
+
+
+
+# Week 4
+
+## A3
+-- Parviz Ahmadov: --
+
+-- Ibrahim Badr: --
+
+Approved PR: https://github.com/remla25-team22/operation/pull/8
 
 -- Parviz Ahmadov: --
 
@@ -98,7 +139,3 @@ Created PR: https://github.com/remla25-team22/operation/pull/11
 Created PR: https://github.com/remla25-team22/operation/pull/10
 
 Created PR: https://github.com/remla25-team22/operation/pull/8
-
-Created PR: https://github.com/remla25-team22/operation/pull/6
-
-Approved PR: https://github.com/remla25-team22/operation/pull/7
