@@ -43,21 +43,14 @@ Approved PR: https://github.com/remla25-team22/lib-ml/pull/1
 Approved PR: https://github.com/remla25-team22/lib-ml/pull/2
 
 
-### Jasper Vos
- - app-service
-     - setup of codebase
-     - setup corresponding build & release pipeline
-     - Create connector client generator
-     - Link lib-version 
- - lib-version
-     - setup of codebase
-     - setup corresponding build & release pipeline (from existing github actions plugin)
- - app-frontend 
-     - setup of codebase
-     - moving of files to wwwroot of app-service, as to fit single image
- - docker compose
-     - setup workign docker-compose.yml
-- reviewed [PR on model-training](https://github.com/remla25-team22/model-training/pull/1)
+-- Jasper Vos --
+
+reviewed PR: https://github.com/remla25-team22/model-training/pull/1
+Created PR: https://github.com/remla25-team22/operation/pull/1
+Created PR: https://github.com/remla25-team22/app-service/pull/1
+Created PR: https://github.com/remla25-team22/app-service/pull/2
+Created PR: https://github.com/remla25-team22/app-service/pull/3
+Created PR: https://github.com/remla25-team22/lib-version/pull/1
 
 # A2:
 
@@ -76,11 +69,15 @@ Created PR: https://github.com/remla25-team22/operation/pull/4
  - operation
      - Applied step 18-19
 
-### Jasper Vos
- - operation
-     - Applied step 8 through 14
-     - Create [pr 3](https://github.com/remla25-team22/operation/pull/3)
-     - Approve [PR 2](https://github.com/remla25-team22/operation/pull/2)
+-- Jasper Vos --
+
+Created PR: https://github.com/remla25-team22/operation/pull/3
+
+Approved PR: https://github.com/remla25-team22/operation/pull/2
+
+Created PR: https://github.com/remla25-team22/operation/pull/5
+
+
   
 # A3:
 
@@ -89,6 +86,13 @@ Created PR: https://github.com/remla25-team22/operation/pull/4
 Created PR: https://github.com/remla25-team22/operation/pull/7
 
 Approved PR: https://github.com/remla25-team22/operation/pull/8
+
+
+--- Jasper Vos ---
+
+Created PR: https://github.com/remla25-team22/app-service/pull/4
+
+Approved PR: https://github.com/remla25-team22/operation/pull/10
 
 
 -- Parviz Ahmadov: --
