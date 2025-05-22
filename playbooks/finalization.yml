@@ -15,13 +15,11 @@
     - name: Apply MetalLB CRDs
       ansible.builtin.command: kubectl apply -f /tmp/metallb-native.yaml
       environment:
-        KUBECONFIG: /etc/kubernetes/admin.conf
-
-
+        KUBECONFIG: "/etc/kubernetes/admin.conf"
 
     - name: Create MetalLB IPAddressPool
       kubernetes.core.k8s:
-        kubeconfig: "~{{ansible_user}}/.kube/config"
+        kubeconfig: "/etc/kubernetes/admin.conf"
         state: present
         definition: |
           apiVersion: metallb.io/v1beta1
@@ -31,11 +29,11 @@
             namespace: metallb-system
           spec:
             addresses:
-              - 192.168.56.80-192.168.56.90          # ← full start-end IPs
+              - 192.168.56.120-192.168.56.130
 
     - name: Create MetalLB L2Advertisement
       kubernetes.core.k8s:
-        kubeconfig: "~{{ansible_user}}/.kube/config"
+        kubeconfig: "~{{ ansible_user }}/.kube/config"
         state: present
         definition: |
           apiVersion: metallb.io/v1beta1
@@ -46,12 +44,12 @@
           spec: {}
 
     - name: Wait for MetalLB controller to be ready
-      ansible.builtin.shell: >-
-        kubectl wait -n metallb-system -l app=metallb,component=controller \
+      ansible.builtin.shell: >
+        kubectl wait -n metallb-system -l app=metallb,component=controller
         --for=condition=ready pod --timeout=60s
       environment:
-        KUBECONFIG: /etc/kubernetes/admin.conf
-        
+        KUBECONFIG: "/etc/kubernetes/admin.conf"
+
     - name: Add ingress-nginx Helm repo
       kubernetes.core.helm_repository:
         name: ingress-nginx
@@ -59,15 +57,15 @@
 
     - name: Install / upgrade NGINX Ingress Controller
       kubernetes.core.helm:
-        name: ingress-nginx               # Helm release name
+        name: ingress-nginx
         chart_ref: ingress-nginx/ingress-nginx
-        release_namespace: ingress-nginx  # target namespace
+        release_namespace: ingress-nginx
         create_namespace: true
-        kubeconfig: /etc/kubernetes/admin.conf
+        kubeconfig: "/etc/kubernetes/admin.conf"
         values:
           controller:
             service:
-              loadBalancerIP: 192.168.56.91
+              loadBalancerIP: 192.168.56.121      # MetalLB address
             ingressClassResource:
               name: nginx
               default: true
@@ -77,3 +75,107 @@
       debug:
         var: ingress_release.stdout
 
+    - name: Add kubernetes-dashboard Helm repo
+      kubernetes.core.helm_repository:
+        name: kubernetes-dashboard
+        repo_url: https://kubernetes.github.io/dashboard/
+
+    - name: Install / upgrade kubernetes-dashboard
+      kubernetes.core.helm:
+        name: kubernetes-dashboard
+        chart_ref: kubernetes-dashboard/kubernetes-dashboard
+        release_namespace: kubernetes-dashboard
+        create_namespace: true
+        kubeconfig: /etc/kubernetes/admin.conf
+
+    - name: Create admin-user ServiceAccount and ClusterRoleBinding
+      kubernetes.core.k8s:
+        kubeconfig: /etc/kubernetes/admin.conf
+        state: present
+        definition: |
+          apiVersion: v1
+          kind: ServiceAccount
+          metadata:
+            name: admin-user
+            namespace: kubernetes-dashboard
+          ---
+          apiVersion: rbac.authorization.k8s.io/v1
+          kind: ClusterRoleBinding
+          metadata:
+            name: admin-user
+          roleRef:
+            apiGroup: rbac.authorization.k8s.io
+            kind: ClusterRole
+            name: cluster-admin
+          subjects:
+            - kind: ServiceAccount
+              name: admin-user
+              namespace: kubernetes-dashboard
+
+    - name: Retrieve Dashboard login token
+      command:
+        argv:
+          - kubectl
+          - -n
+          - kubernetes-dashboard
+          - create
+          - token
+          - admin-user
+          - --duration=24h
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+      register: dash_token
+
+    - name: Show the Dashboard login token
+      debug:
+        msg: "{{ dash_token.stdout }}"
+
+    - name: Generate self-signed certificate if absent
+      ansible.builtin.command: >
+        openssl req -x509 -nodes -newkey rsa:2048
+        -days 365
+        -subj "/CN=dashboard.local"
+        -keyout /tmp/dashboard.key
+        -out /tmp/dashboard.crt
+      args:
+        creates: /tmp/dashboard.crt
+
+    - name: Create / update Kubernetes TLS secret
+      ansible.builtin.shell: >
+        kubectl -n kubernetes-dashboard create secret tls dashboard-local-tls
+        --key /tmp/dashboard.key --cert /tmp/dashboard.crt
+        --dry-run=client -o yaml | kubectl apply -f -
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
+    - name: Expose Kubernetes Dashboard through NGINX Ingress
+      kubernetes.core.k8s:
+        kubeconfig: /etc/kubernetes/admin.conf
+        state: present
+        definition: |
+          apiVersion: networking.k8s.io/v1
+          kind: Ingress
+          metadata:
+            name: kubernetes-dashboard
+            namespace: kubernetes-dashboard
+            annotations:
+              nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+              nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+              nginx.ingress.kubernetes.io/ssl-redirect: "true"
+          spec:
+            ingressClassName: nginx
+            tls:
+              - hosts:
+                  - dashboard.local
+                secretName: dashboard-local-tls
+            rules:
+              - host: dashboard.local
+                http:
+                  paths:
+                    - path: /
+                      pathType: Prefix
+                      backend:
+                        service:
+                          name: kubernetes-dashboard-kong-proxy
+                          port:
+                            number: 443
