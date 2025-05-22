@@ -9,7 +9,7 @@ Created PR: https://github.com/remla25-team22/lib-ml/pull/2
 
 -- Jasper Vos: --
 
-- reviewed [PR on model-training](https://github.com/remla25-team22/model-training/pull/1)
+Reviewed PR: https://github.com/remla25-team22/model-training/pull/1
 
 # Week 3
 ## A1:
@@ -33,6 +33,7 @@ Approved PR: https://github.com/remla25-team22/lib-ml/pull/4
 
 
 -- Parviz Ahmadov: --
+
 Created PR: https://github.com/remla25-team22/lib-ml/pull/3
 
 Created PR: https://github.com/remla25-team22/lib-ml/pull/4
@@ -122,11 +123,9 @@ Approved PR: https://github.com/remla25-team22/operation/pull/7
 
 
 
-
-# Week 4
+# Week 5
 
 ## A3
--- Parviz Ahmadov: --
 
 -- Ibrahim Badr: --
 
