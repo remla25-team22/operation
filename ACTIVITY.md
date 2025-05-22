@@ -92,9 +92,9 @@ Approved PR: https://github.com/remla25-team22/operation/pull/8  (related to A2)
 
 --- Jasper Vos ---
 
-Created PR: https://github.com/remla25-team22/app-service/pull/4
+Created PR: https://github.com/remla25-team22/app-service/pull/4 (related to A3)
 
-Approved PR: https://github.com/remla25-team22/operation/pull/10
+Approved PR: https://github.com/remla25-team22/operation/pull/10 (related to A2)
 
 
 -- Parviz Ahmadov: --
