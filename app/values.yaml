@@ -2,7 +2,12 @@ modelService:
   image: ghcr.io/remla25-team22/model-service
   tag: 1.0.1
   modeltag: v1.0.1
+  port: 8080
 appService:
   image: ghcr.io/remla25-team22/app-service
   tag: v1.1.0
+  port: 8080
+ingress:
+  enabled: true
+  host: app.local
 
