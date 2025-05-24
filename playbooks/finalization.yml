@@ -33,7 +33,7 @@
 
     - name: Create MetalLB L2Advertisement
       kubernetes.core.k8s:
-        kubeconfig: "~{{ ansible_user }}/.kube/config"
+        kubeconfig: "/etc/kubernetes/admin.conf"
         state: present
         definition: |
           apiVersion: metallb.io/v1beta1
@@ -169,7 +169,7 @@
                   - dashboard.local
                 secretName: dashboard-local-tls
             rules:
-              - host: dashboard.local
+              - host: dashboard.local        kubeconfig: /etc/kubernetes/admin.conf
                 http:
                   paths:
                     - path: /
