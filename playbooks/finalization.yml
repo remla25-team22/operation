@@ -199,12 +199,11 @@
         state: link
 
     - name: Install Istio control plane
-      ansible.builtin.command: istioctl install -y --set profile=default
-      environment:
-        KUBECONFIG: "/etc/kubernetes/admin.conf"
+      ansible.builtin.command: >
+        istioctl install -y --set profile=default --kubeconfig=/etc/kubernetes/admin.conf
       args:
-        creates: /etc/istio   # only runs once
-      register: istio_install
+        creates: /etc/istio
+
 
     - name: Wait until every Istio pod is Ready
       ansible.builtin.command: >
@@ -216,7 +215,7 @@
         KUBECONFIG: "/etc/kubernetes/admin.conf"
       register: istio_wait
       changed_when: false          # this is just a wait, don’t mark the play as “changed”
-      retries: 3                   # if the API server isn’t up yet, retry
+      retries: 3                   
       delay: 10
       until: istio_wait.rc == 0
 
