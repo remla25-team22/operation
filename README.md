@@ -196,6 +196,29 @@ echo -e "192.168.56.121 app.local
 
 
 
+
+### Assignment 4 – ML Configuration Management and Testing
+
+- The `model-training` project has been refactored into a modular, Cookiecutter-inspired structure with clearly separated stages: data preparation, training, evaluation, and prediction.
+- A complete DVC pipeline is defined using `dvc.yaml`, allowing full reproducibility via `dvc repro`.
+- Model performance is logged to `metrics.json`, and DVC tracks experiments and metrics using `dvc exp show`.
+- Remote dataset support is built-in — if the raw data is not present locally, it is downloaded from a remote URL in `data_prep.py`.
+- The pipeline includes:
+  - `data_prep.py`: Cleans and prepares text data
+  - `train.py`: Trains a Naive Bayes model and serializes it with joblib
+  - `evaluate.py`: Evaluates the model and writes metrics
+  - `predict.py`: Accepts custom review input and predicts sentiment interactively. to run it:
+    ```bash
+    python -m src.predict
+    ```
+
+- A virtual environment is used with a `requirements.txt` including all necessary packages like `dvc`, `scikit-learn`, `pylint`, `pytest`, `coverage`, `bandit`, etc.
+- A `.gitignore` has been added to exclude cache, venv, model artifacts, DVC files, and IDE/config files.
+- Testing and CI setup is ongoing:
+  - Unit and metamorphic tests will be added in `tests/`
+  - Linting and test coverage will be integrated using GitHub Actions
+
+
 ##  Activity Log
 
 See [ACTIVITY.md](./ACTIVITY.md) for individual PR links, and approvals.
