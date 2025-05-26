@@ -233,6 +233,9 @@ The table summarizes the implemented tests.
 | **Monitoring**              | - Predictions are within valid range `{0, 1}`                                |
 | **Mutamorphic Testing**     | - Synonyms and paraphrases produce consistent predictions                   |
 | **Non-functional Requirements** | - Model inference takes < 0.5 seconds per input                        |
+
+
+
 Continuous Training part has not been implemented yet. Tests can be run with pytest `tests/test_main.py` inside the `model-training` repository. 
 
 
