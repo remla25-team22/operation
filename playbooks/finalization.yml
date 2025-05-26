@@ -17,7 +17,16 @@
       environment:
         KUBECONFIG: "/etc/kubernetes/admin.conf"
 
-    - name: Create MetalLB IPAddressPool
+    - name: Wait for MetalLB controller pod to be ready
+      ansible.builtin.shell: >
+        kubectl wait --namespace metallb-system 
+        --for=condition=ready pod 
+        --selector=component=controller 
+        --timeout=90s
+      environment:
+        KUBECONFIG: "/etc/kubernetes/admin.conf"
+
+    - name: Create MetalLB IPAddressPool (with retries)
       kubernetes.core.k8s:
         kubeconfig: "/etc/kubernetes/admin.conf"
         state: present
@@ -30,6 +39,10 @@
           spec:
             addresses:
               - 192.168.56.120-192.168.56.130
+      register: metallb_pool
+      retries: 5
+      delay: 10
+      until: metallb_pool is not failed
 
     - name: Create MetalLB L2Advertisement
       kubernetes.core.k8s:
@@ -42,13 +55,6 @@
             name: default-l2adv
             namespace: metallb-system
           spec: {}
-
-    - name: Wait for MetalLB controller to be ready
-      ansible.builtin.shell: >
-        kubectl wait -n metallb-system -l app=metallb,component=controller
-        --for=condition=ready pod --timeout=60s
-      environment:
-        KUBECONFIG: "/etc/kubernetes/admin.conf"
 
     - name: Add ingress-nginx Helm repo
       kubernetes.core.helm_repository:
@@ -65,7 +71,7 @@
         values:
           controller:
             service:
-              loadBalancerIP: 192.168.56.121      # MetalLB address
+              loadBalancerIP: 192.168.56.121
             ingressClassResource:
               name: nginx
               default: true
@@ -74,6 +80,15 @@
     - name: Show ingress-nginx release output
       debug:
         var: ingress_release.stdout
+
+    - name: Wait for ingress-nginx controller pod to be ready
+      ansible.builtin.shell: >
+        kubectl wait --namespace ingress-nginx 
+        --for=condition=ready pod 
+        --selector=app.kubernetes.io/component=controller 
+        --timeout=90s
+      environment:
+        KUBECONFIG: "/etc/kubernetes/admin.conf"
 
     - name: Add kubernetes-dashboard Helm repo
       kubernetes.core.helm_repository:
@@ -146,7 +161,7 @@
         --key /tmp/dashboard.key --cert /tmp/dashboard.crt
         --dry-run=client -o yaml | kubectl apply -f -
       environment:
-        KUBECONFIG: /etc/kubernetes/admin.conf
+        KUBECONFIG: "/etc/kubernetes/admin.conf"
 
     - name: Expose Kubernetes Dashboard through NGINX Ingress
       kubernetes.core.k8s:
@@ -169,7 +184,7 @@
                   - dashboard.local
                 secretName: dashboard-local-tls
             rules:
-              - host: dashboard.local        kubeconfig: /etc/kubernetes/admin.conf
+              - host: dashboard.local
                 http:
                   paths:
                     - path: /
@@ -204,7 +219,6 @@
       args:
         creates: /etc/istio
 
-
     - name: Wait until every Istio pod is Ready
       ansible.builtin.command: >
         kubectl -n istio-system wait pod
@@ -214,8 +228,8 @@
       environment:
         KUBECONFIG: "/etc/kubernetes/admin.conf"
       register: istio_wait
-      changed_when: false          # this is just a wait, don’t mark the play as “changed”
-      retries: 3                   
+      changed_when: false
+      retries: 3
       delay: 10
       until: istio_wait.rc == 0
 
