@@ -194,6 +194,22 @@ echo -e "192.168.56.121 app.local
 > ```
 
 
+### Assignment 4 – ML Configuration Management
+
+#### ML Testing 
+
+The table summarizes the implemented tests.
+
+| Category                 | Test Description                                                                 |
+|--------------------------|----------------------------------------------------------------------------------|
+| **Feature & Data Integrity** | - Dataset contains `Review` column<br>- No empty reviews                    |
+| **Model Development**       | - Model predicts correct output shape for multiple inputs                   |
+| **ML Infrastructure**       | - Required model files exist (`BoW`, classifier)                             |
+| **Monitoring**              | - Predictions are within valid range `{0, 1}`                                |
+| **Mutamorphic Testing**     | - Synonyms and paraphrases produce consistent predictions                   |
+| **Non-functional Requirements** | - Model inference takes < 0.5 seconds per input                        |
+
+Continuous Training part has not been implemented yet. Tests can be run with pytest `tests/test_main.py` inside the `model-training` repository. 
 
 
 ##  Activity Log
