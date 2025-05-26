@@ -199,6 +199,9 @@ echo -e "192.168.56.121 app.local
 
 ### Assignment 4 – ML Configuration Management and Testing
 
+
+#### ML Configuration Management
+
 - The `model-training` project has been refactored into a modular, Cookiecutter-inspired structure with clearly separated stages: data preparation, training, evaluation, and prediction.
 - A complete DVC pipeline is defined using `dvc.yaml`, allowing full reproducibility via `dvc repro`.
 - Model performance is logged to `metrics.json`, and DVC tracks experiments and metrics using `dvc exp show`.
@@ -217,6 +220,20 @@ echo -e "192.168.56.121 app.local
 - Testing and CI setup is ongoing:
   - Unit and metamorphic tests will be added in `tests/`
   - Linting and test coverage will be integrated using GitHub Actions
+
+
+#### Testing 
+
+The table summarizes the implemented tests.
+| Category                 | Test Description                                                                 |
+|--------------------------|----------------------------------------------------------------------------------|
+| **Feature & Data Integrity** | - Dataset contains `Review` column<br>- No empty reviews                    |
+| **Model Development**       | - Model predicts correct output shape for multiple inputs                   |
+| **ML Infrastructure**       | - Required model files exist (`BoW`, classifier)                             |
+| **Monitoring**              | - Predictions are within valid range `{0, 1}`                                |
+| **Mutamorphic Testing**     | - Synonyms and paraphrases produce consistent predictions                   |
+| **Non-functional Requirements** | - Model inference takes < 0.5 seconds per input                        |
+Continuous Training part has not been implemented yet. Tests can be run with pytest `tests/test_main.py` inside the `model-training` repository. 
 
 
 ##  Activity Log
