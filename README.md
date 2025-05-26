@@ -139,11 +139,33 @@ Each repository includes a `README.md`, tagged release, and is public for peer r
 
 ### Assignment 3
 
-- Setup helm 
-- Setup monitoring
-- Setup Grafana
+- Chart can be installed through helm that creates containers in vms through kubernetes
+- Grafana and Prometheus have been integrated, and can be accessed locally
+- Dashboards have been created and can be accessed inside the folder `dashboards`
 
-Unfortunately, we were unable to tie everything together as of yet (we experienced a lot of issues with the setup of assignment 2). to get a preview of the app, run `docker compose up` and navigate to localhost:8080/index.html, to access grafana, navigate to localhost:3000
+Apply `finalization.yml`:
+
+ansible-playbook -i inventory.cfg playbooks/finalization.yml --limit ctrl 
+
+Then, containers can be transferred to Kubernetes through:
+
+`helm install my-app ./app`
+
+Add the host names can be added locally to `/etc/hosts` through:
+
+`echo -e "192.168.56.121 app.local\n192.168.56.121 dashboard.local\n192.168.56.121 grafana.local\n192.168.56.121 prometheus.local\n192.168.56.121 grafana.local" | sudo tee -a /etc/hosts`
+
+Then visit `https://app.local/index.html` for accessing the website
+
+Visit `https://dashboard.local` for accessing the dashboard
+
+Visit `https://prometheus.local` for accessing the prometheus
+
+Visit `https://grafana.local` for accessing the grafana
+
+Dashboards can be found under dashboards folder.
+
+
 
 
 ##  Activity Log
