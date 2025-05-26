@@ -108,3 +108,12 @@ Created PR: https://github.com/remla25-team22/operation/pull/8
 Created PR: https://github.com/remla25-team22/operation/pull/6
 
 Approved PR: https://github.com/remla25-team22/operation/pull/7
+
+# Week 5:
+
+-- Ibrahim Badr: --
+
+Created PR: https://github.com/remla25-team22/operation/pull/17  (related to A3)
+
+Approved PR: https://github.com/remla25-team22/operation/pull/18  (related to A3)
+
