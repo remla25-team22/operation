@@ -137,40 +137,68 @@ Each repository includes a `README.md`, tagged release, and is public for peer r
 - Successfully implemented and validated all provisioning tasks through step 19 of the assignment.
 ---
 
-### Assignment 3
+### Assignment 3 – Kubernetes Services and Monitoring
 
-- Chart can be installed through helm that creates containers in vms through kubernetes
-- Grafana and Prometheus have been integrated, and can be accessed locally
-- Dashboards have been created and can be accessed inside the folder `dashboards`
+- Migrated from Docker Compose to Kubernetes using Helm.
+- Prometheus and Grafana have been integrated for monitoring; dashboards are available in the `dashboards/` folder.
 
-Apply `finalization.yml`:
+#### 1. Finalize the Cluster Setup
 
-ansible-playbook -i inventory.cfg playbooks/finalization.yml --limit ctrl 
+Run the following playbook:
 
-Then, containers can be transferred to Kubernetes through:
+```bash
+ansible-playbook -i inventory.cfg playbooks/finalization.yml --limit ctrl
+```
 
-`helm install my-app ./app`
+This deploys MetalLB, NGINX Ingress, Istio, Prometheus, Grafana, and the Kubernetes Dashboard.
 
-Add the host names can be added locally to `/etc/hosts` through:
+---
 
-`echo -e "192.168.56.121 app.local\n192.168.56.121 dashboard.local\n192.168.56.121 grafana.local\n192.168.56.121 prometheus.local\n192.168.56.121 grafana.local" | sudo tee -a /etc/hosts`
+#### 2. Deploy the Application to Kubernetes
 
-Then visit `https://app.local/index.html` for accessing the website
+SSH into the controller node and install the Helm chart:
 
-Visit `https://dashboard.local` for accessing the dashboard
+```bash
+vagrant ssh ctrl
+cd /vagrant
+helm install my-app ./app
+```
 
-Visit `https://prometheus.local` for accessing the prometheus
+---
 
-Visit `https://grafana.local` for accessing the grafana
+#### 3. Set Local Host Entries
 
-Dashboards can be found under dashboards folder.
+To make local domain names work, run this command on your host machine:
+
+```bash
+echo -e "192.168.56.121 app.local
+192.168.56.121 dashboard.local
+192.168.56.121 grafana.local
+192.168.56.121 prometheus.local" | sudo tee -a /etc/hosts
+```
+
+---
+
+#### 4. Access the Services
+
+-  App Frontend: [https://app.local/index.html](https://app.local/index.html)
+-  Grafana: [https://grafana.local](https://grafana.local)
+-  Prometheus: [https://prometheus.local](https://prometheus.local)
+-  Kubernetes Dashboard: [https://dashboard.local](https://dashboard.local)
+
+> **Dashboard Login Token**: The token is printed at the end of the `finalization.yml` playbook.  
+> If needed, SSH into the controller VM and regenerate it with:
+>
+> ```bash
+> kubectl -n kubernetes-dashboard create token admin-user
+> ```
 
 
 
 
 ##  Activity Log
 
-See [ACTIVITY.md](./ACTIVITY.md) for individual contributions, PR links, and approvals.
+See [ACTIVITY.md](./ACTIVITY.md) for individual PR links, and approvals.
 
 
 ---
