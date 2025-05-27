@@ -1,46 +1,13 @@
-name: Auto Tag, Release, and Bump
-
-on:
-  push:
-    branches:
-      - main
-
-jobs:
-  tag_and_bump:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
-
-      - name: Set up Git
-        run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-
-      - name: Read current version from VERSION.txt
-        id: version
+      - name: Bump to next patch version
         run: |
           VERSION=$(cat VERSION.txt)
-          echo "Current version: $VERSION"
+          echo "Previous version: $VERSION"
 
-          # Check if tag already exists
-          if git ls-remote --tags origin | grep -q "refs/tags/$VERSION"; then
-            echo "Tag $VERSION already exists. Skipping."
-            exit 0
-          fi
-
-          # Create and push tag
-          git tag $VERSION
-          git push origin $VERSION
-
-      - name: Bump to next patch pre-release
-        run: |
-          VERSION=$(cat VERSION.txt)
           IFS='.' read -r MAJOR MINOR PATCH <<< "${VERSION#v}"
           NEXT_PATCH=$((PATCH + 1))
-          NEXT_VERSION="v${MAJOR}.${MINOR}.${NEXT_PATCH}-pre"
+          NEXT_VERSION="v${MAJOR}.${MINOR}.${NEXT_PATCH}"
 
+          echo "Bumping to $NEXT_VERSION"
           echo "$NEXT_VERSION" > VERSION.txt
 
           git add VERSION.txt
