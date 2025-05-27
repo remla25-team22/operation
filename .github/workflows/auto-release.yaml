@@ -34,6 +34,19 @@ jobs:
           # Create and push tag
           git tag $VERSION
           git push origin $VERSION
+          
+      - name: Tag the current version (if not already tagged)
+        run: |
+          VERSION=$(cat VERSION.txt)
+          echo "Current version is: $VERSION"
+
+          if git rev-parse "refs/tags/$VERSION" >/dev/null 2>&1; then
+            echo "Tag $VERSION already exists. Skipping tagging."
+            exit 0
+          fi
+
+          git tag $VERSION
+          git push origin $VERSION
 
       - name: Bump to next patch version
         run: |
