@@ -44,11 +44,19 @@ jobs:
           echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
           echo "$NEXT_VERSION" > VERSION.txt
 
-      - name: Create pull request for version bump
-        uses: peter-evans/create-pull-request@v5
-        with:
-          commit-message: "Bump to ${{ env.NEXT_VERSION }} after release"
-          branch: version-bump
-          title: "Bump version to ${{ env.NEXT_VERSION }}"
-          body: |
-            This PR bumps the version in `VERSION.txt` to `${{ env.NEXT_VERSION }}` after the latest release.
+      - name: Push version bump to a new branch
+        run: |
+          VERSION=$(cat VERSION.txt)
+          IFS='.' read -r MAJOR MINOR PATCH <<< "${VERSION#v}"
+          NEXT_PATCH=$((PATCH + 1))
+          NEXT_VERSION="v${MAJOR}.${MINOR}.${NEXT_PATCH}"
+
+          echo "$NEXT_VERSION" > VERSION.txt
+
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+
+          git checkout -b version-bump
+          git add VERSION.txt
+          git commit -m "Bump version to $NEXT_VERSION after release $VERSION"
+          git push origin version-bump
