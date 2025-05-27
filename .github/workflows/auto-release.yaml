@@ -59,4 +59,4 @@ jobs:
           git checkout -b version-bump
           git add VERSION.txt
           git commit -m "Bump version to $NEXT_VERSION after release $VERSION"
-          git push origin version-bump
+          git push --force origin version-bump
