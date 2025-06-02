@@ -119,8 +119,22 @@ Created PR:  https://github.com/remla25-team22/model-training/pull/4   (related 
 
 Approved PR: https://github.com/remla25-team22/operation/pull/18  (related to A3)
 
+-- Jasper Vos: --
+
+Created PR: https://github.com/remla25-team22/model-training/pull/7 (related to A4)
+
+Approved PR: https://github.com/remla25-team22/model-training/pull/6
+
 # Week 6: 
+
+-- Ibrahim Badr: --
+
 Created PR: https://github.com/remla25-team22/operation/pull/21   (related to A5)
 
 Approved PR: https://github.com/remla25-team22/model-training/pull/8   (related to A4)
 
+-- Jasper Vos: --
+
+Created PR: https://github.com/remla25-team22/model-training/pull/8 (related to A4)
+
+Approved PR: https://github.com/remla25-team22/operation/pull/21
