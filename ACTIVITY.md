@@ -119,3 +119,7 @@ Created PR:  https://github.com/remla25-team22/model-training/pull/4   (related 
 
 Approved PR: https://github.com/remla25-team22/operation/pull/18  (related to A3)
 
+# Week 6: 
+Created PR: https://github.com/remla25-team22/operation/pull/21 (related to A5)
+
+
