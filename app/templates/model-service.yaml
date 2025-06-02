@@ -6,6 +6,5 @@ spec:
   selector:
     app: model-service
   ports:
-  - port: 8080
-    targetPort: 8080
-  type: ClusterIP
+    - port: 80
+      targetPort: 8080

@@ -1,22 +1,24 @@
+{{- range .Values.app.versions }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-service
+  name: app-service-{{ .name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
       app: app-service
+      version: {{ .name }}
   template:
     metadata:
       labels:
         app: app-service
+        version: {{ .name }}
     spec:
       containers:
-      - name: frontend
-        image: {{ .Values.appService.image }}:{{ .Values.appService.tag }}
-        env:
-        - name: BackendUrl
-          value: http://model-service:{{.Values.modelService.port}}
-        ports:
-        - containerPort: {{.Values.appService.port}}
+        - name: app
+          image: {{ .image }}
+          ports:
+            - containerPort: 8080
+---
+{{- end }}

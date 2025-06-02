@@ -242,3 +242,4 @@
       ansible.builtin.command: kubectl apply -f /opt/istio-1.25.2/samples/addons/grafana.yaml
       environment:
         KUBECONFIG: "/etc/kubernetes/admin.conf"
+
