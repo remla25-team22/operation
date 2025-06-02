@@ -192,6 +192,7 @@ echo -e "192.168.56.121 app.local
 > ```bash
 > kubectl -n kubernetes-dashboard create token admin-user
 > ```
+---
 
 
 
@@ -235,7 +236,38 @@ The table summarizes the implemented tests.
 | **Non-functional Requirements** | - Model inference takes < 0.5 seconds per input                        |
 
 Continuous Training part has not been implemented yet. Tests can be run with pytest `tests/test_main.py` inside the `model-training` repository. 
+---
 
+
+### Assignment 5 – Continuous Experimentation & Istio Service Mesh
+
+#### Traffic Management with Istio
+
+- Enabled Istio sidecar injection for the `default` namespace.
+- Two versions (`v1`, `v2`) of both `app-service` and `model-service` have been deployed to simulate a canary release scenario.
+- Each deployment is labeled with `version: v1` and `version: v2` respectively.
+- Created the following Istio configuration files in the `istio/` folder:
+  - `gateway.yaml`: Defines an Istio `Gateway` to expose the app externally.
+  - `virtual-service.yaml`: Routes a portion of traffic to the `v2` services (e.g. 90% to v1, 10% to v2).
+  - `destination-rule.yaml`: Defines routing rules per version for sticky sessions.
+- Used sticky session routing via headers to ensure consistent user experience (e.g., based on `user` header).
+- Used curl to test traffic splitting and verify routing behavior.
+
+> Deploy the app as explained previously then Apply istio.
+
+**Apply istio**
+
+```bash
+kubectl apply -f istio/
+```
+> App frontend now routes traffic between v1 and v2 services based on Istio routing rules.
+
+#### Example curl command to test routing:
+
+```bash
+curl -sk https://app.local/index.html
+curl -sk -H "user: test-v2" https://app.local/index.html
+```
 
 ##  Activity Log
 
