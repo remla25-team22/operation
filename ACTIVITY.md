@@ -70,6 +70,7 @@ Approved PR: https://github.com/remla25-team22/operation/pull/3  (related to A2)
 
 Created PR: https://github.com/remla25-team22/operation/pull/4  (related to A2)
 
+Approved PR: https://github.com/remla25-team22/operation/pull/5
 
 -- Jasper Vos --
 
@@ -107,15 +108,18 @@ Created PR: https://github.com/remla25-team22/operation/pull/8
 
 Created PR: https://github.com/remla25-team22/operation/pull/6
 
+Created PR: https://github.com/remla25-team22/operation/pull/17  
+
 Approved PR: https://github.com/remla25-team22/operation/pull/7
 
 # Week 5:
 
 -- Ibrahim Badr: --
 
-Created PR: https://github.com/remla25-team22/operation/pull/17  (related to A3)
 
 Created PR:  https://github.com/remla25-team22/model-training/pull/4   (related to A4)
+
+Approved PR: https://github.com/remla25-team22/operation/pull/17  (related to A3)
 
 Approved PR: https://github.com/remla25-team22/operation/pull/18  (related to A3)
 
@@ -124,6 +128,15 @@ Approved PR: https://github.com/remla25-team22/operation/pull/18  (related to A3
 Created PR: https://github.com/remla25-team22/model-training/pull/7 (related to A4)
 
 Approved PR: https://github.com/remla25-team22/model-training/pull/6
+
+-- Parviz Ahmadov: --
+
+
+Created PR: https://github.com/remla25-team22/model-training/pull/3
+
+Created PR: https://github.com/remla25-team22/model-training/pull/6 (related to A4)
+
+Approved PR: https://github.com/remla25-team22/operation/pull/18 (related to A4)
 
 # Week 6: 
 
@@ -138,3 +151,5 @@ Approved PR: https://github.com/remla25-team22/model-training/pull/8   (related 
 Created PR: https://github.com/remla25-team22/model-training/pull/8 (related to A4)
 
 Approved PR: https://github.com/remla25-team22/operation/pull/21
+
+-- Parviz Ahmadov: --
