@@ -15,8 +15,8 @@ This repository contains the deployment and setup for our Restaurant Sentiment A
 1. Open terminal in operation (this folder)
 2. Run `docker compose up`
 3. Using any browser, navigate to [http://localhost:8080/index.html](http://localhost:8080/index.html)
-4. Insert a review into the text box (i.e. "The selection on the menu was great and so were the prics.")
-5. Press send to get sentiment prediction
+4. Insert a review into the text box (i.e. "The selection on the menu was great and so were the prices.")
+5. Press send to get sentiment prediction and give a feadback.
 
 ---
 
