@@ -1,9 +1,14 @@
-name: Auto Tag, Release, and Bump (with PR)
+name: Auto Tag, Release, and Bump (main + tag trigger)
 
 on:
   push:
     branches:
       - main
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: write
 
 jobs:
   tag_and_bump:
@@ -15,61 +20,40 @@ jobs:
 
       - name: Set up Git
         run: |
-          git config user.name github-actions
-          git config user.email github-actions@github.com
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
-      - name: Read current version from VERSION.txt
-        id: version
+      - name: Read and Tag Current Version
+        id: versioning
         run: |
           VERSION=$(cat VERSION.txt)
           echo "VERSION=$VERSION" >> $GITHUB_ENV
           echo "Current version: $VERSION"
 
-          # Check if tag already exists
+          # Check if tag already exists remotely
           if git ls-remote --tags origin | grep -q "refs/tags/$VERSION"; then
-            echo "Tag $VERSION already exists. Skipping."
-            exit 0
-          fi
-
-          # Create and push tag
-          git tag $VERSION
-          git push origin $VERSION
-          
-      - name: Tag the current version (if not already tagged)
-        run: |
-          VERSION=$(cat VERSION.txt)
-          echo "Current version is: $VERSION"
-
-          if git rev-parse "refs/tags/$VERSION" >/dev/null 2>&1; then
             echo "Tag $VERSION already exists. Skipping tagging."
             exit 0
           fi
 
-          git tag $VERSION
-          git push origin $VERSION
+          # Create and push the new tag
+          git tag "$VERSION"
+          git push origin "$VERSION"
 
       - name: Bump to next patch version
+        if: ${{ success() }}
         run: |
-          VERSION=$(cat VERSION.txt)
+          VERSION=${{ env.VERSION }}
           IFS='.' read -r MAJOR MINOR PATCH <<< "${VERSION#v}"
           NEXT_PATCH=$((PATCH + 1))
           NEXT_VERSION="v${MAJOR}.${MINOR}.${NEXT_PATCH}"
+          echo "$NEXT_VERSION" > VERSION.txt
           echo "NEXT_VERSION=$NEXT_VERSION" >> $GITHUB_ENV
-          echo "$NEXT_VERSION" > VERSION.txt
+          echo "Next version will be: $NEXT_VERSION"
 
-      - name: Push version bump to a new branch
+      - name: Commit and Push Version Bump to main
+        if: ${{ success() }}
         run: |
-          VERSION=$(cat VERSION.txt)
-          IFS='.' read -r MAJOR MINOR PATCH <<< "${VERSION#v}"
-          NEXT_PATCH=$((PATCH + 1))
-          NEXT_VERSION="v${MAJOR}.${MINOR}.${NEXT_PATCH}"
-
-          echo "$NEXT_VERSION" > VERSION.txt
-
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-
-          git checkout -b version-bump
           git add VERSION.txt
-          git commit -m "Bump version to $NEXT_VERSION after release $VERSION"
-          git push --force origin version-bump
+          git commit -m "Bump version to ${{ env.NEXT_VERSION }} after releasing ${{ env.VERSION }}"
+          git push origin main
