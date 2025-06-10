@@ -57,3 +57,11 @@ jobs:
           git add VERSION.txt
           git commit -m "Bump version to ${{ env.NEXT_VERSION }} after releasing ${{ env.VERSION }}"
           git push origin main
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v1
+        with:
+          tag_name: ${{ env.VERSION }}
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
