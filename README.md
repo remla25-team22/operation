@@ -12,7 +12,7 @@ This repository contains the deployment and setup for our Restaurant Sentiment A
 
 ### Running the application
 
-1. Open terminal in operation (this folder)
+1. Open terminal in the operation (this folder)
 2. Run `docker compose up`
 3. Using any browser, navigate to [http://localhost:8080/index.html](http://localhost:8080/index.html)
 4. Insert a review into the text box (i.e. "The selection on the menu was great and so were the prices.")
