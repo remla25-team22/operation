@@ -1,0 +1,24 @@
+@startuml DeploymentArchitecture
+title Kubernetes Deployment Architecture
+
+node "Kubernetes Cluster" {
+
+
+    package "Istio Mesh"{
+        node "Ingress Gateway" as gateway
+        database "Prometheus" as prometheus
+        component "Grafana" as grafana
+            package "Services" {
+        component "app-service" as app
+        component "model-service" as model
+    }
+    }
+}
+
+gateway -> app : HTTP Request
+app -> model : API Call
+app -down-> prometheus : Metrics
+model -down-> prometheus : Metrics
+prometheus -down-> grafana : Metrics Visualization
+gateway --> grafana : Visualzation dashboard
+@enduml
