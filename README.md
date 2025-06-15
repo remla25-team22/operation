@@ -27,6 +27,13 @@ This repository contains the deployment and setup for our Restaurant Sentiment A
 - Vagrant
 - Ansible
 
+
+All commands related to starting, stopping and provisioning the cluster are to be executed from within the `provisioning` directory. Before exectuing the following commands, change the current directory to the `provisioning` directory using the following command:
+
+```bash
+cd ./provisioning
+```
+
 #### Starting the cluster
 
 ```bash
@@ -65,7 +72,7 @@ After provisioning, each team member can SSH into any VM using their registered 
 #### Student 1 (from host machine):
 
 ```bash
-ssh -i ~/.ssh/student1 vagrant@192.168.56.100
+ssh -i ~/.ssh/student1 vagrant@192.168.56.99
 ```
 
 #### Student 2:
@@ -76,7 +83,8 @@ ssh -i ~/.ssh/student2 vagrant@192.168.56.101
 
 > For more nodes, replace the IP with the correct node (`192.168.56.102`, etc.)
 
- No password is required if the public key is registered.
+ No password is required if the public key is registered. Without a registered ssh key a password is required, the default password set by vagrant is `vagrant`.
+
 
 ---
 
@@ -86,9 +94,9 @@ ssh -i ~/.ssh/student2 vagrant@192.168.56.101
 This repository contains:
 
 - `docker-compose.yml`: Brings up the app and model-service containers
-- `Vagrantfile`: Provisions Kubernetes-ready VMs using VirtualBox
-- `playbooks/`: Ansible playbooks to configure all VMs
-- `templates/hosts.j2`: Jinja2 template for dynamic /etc/hosts generation
+- `provisioning/Vagrantfile`: Provisions Kubernetes-ready VMs using VirtualBox
+- `provisioning/playbooks/`: Ansible playbooks to configure all VMs
+- `provisioning/templates/hosts.j2`: Jinja2 template for dynamic /etc/hosts generation
 - `README.md`: Overview of deployment setup and instructions
 - `ACTIVITY.md`: Summary of individual team member GitHub contributions (PRs and approvals)
 
