@@ -168,6 +168,10 @@ Approved PR: https://github.com/remla25-team22/operation/pull/21
 
 -- Jasper Vos: --
 
+Created PR: https://github.com/remla25-team22/operation/pull/25 (related to A5)
+
+Approved PR: https://github.com/remla25-team22/model-service/pull/3
+
  # Week 9:
 
 -- Ibrahim Badr: --
