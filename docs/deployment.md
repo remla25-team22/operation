@@ -39,7 +39,7 @@ The following services are deployed to the kubernetes cluster:
 - `Istio Service Mesh`: Routes internal and external requests. 
     Makes use of `IngressGateway`, `VirtualService`, and `DestinationRule` to support canary deployment.
 
-The following image visually describes the afformentioned system architecture:
+The following image visually describes the aforementioned system architecture:
 
 ![cluster layout](img/cluster-diagram.png)
 
@@ -49,7 +49,7 @@ A Helm chart is used to deploy the `app-service` and `model-service` to the kube
 
 The `Prometheus` and `Grafana` services are deployed during provisioning using ansible, and are therefore pre-set in the cluster. 
 
-The [values file](../app/values.yaml) describes the versions for both the `app-service` and `model-service` which are to be deployed. The current setup defines both a v1 and v2 to be deployed for both serivces.
+The [values file](../app/values.yaml) describes the versions for both the `app-service` and `model-service` which are to be deployed. The current setup defines both a v1 and v2 to be deployed for both services.
 
 
 ## Istio Service Mesh 
@@ -70,7 +70,7 @@ The istio serivce mesh is configured separate from the Helm chart, and performs 
 ## Request flow
 
 1. An incoming (external) request enters the cluster through the Istio defined `Ingress Gateway`
-2. Istio routes the request via a `Virtual Service` to `app-service v1` or `app-sesrvice v2` based on canary rules with a 90/10 split
+2. Istio routes the request via a `Virtual Service` to `app-service v1` or `app-service v2` based on canary rules with a 90/10 split
 3. Sticky sessions are used to ensure consistent routing per user
 4. The `app-service` forwards incoming requests to the corresponding `model-service` (either `v1` or `v2`, based on `app-service` version)
 5. `app-service` serves the response from `model-service` to the user
@@ -81,7 +81,7 @@ The istio serivce mesh is configured separate from the Helm chart, and performs 
 ## Monitoring
 
 ### Prometheus
-The `app-service` reports metrics and telemetry data to the Prometheus service, which stores the data for monitoring and visualisation purposes.
+The `app-service` reports metrics and telemetry data to the Prometheus service, which stores the data for monitoring and visualization purposes.
 
 ### Grafana
 To visualize data collected by Prometheus, Grafana is deployed to the cluster.  
