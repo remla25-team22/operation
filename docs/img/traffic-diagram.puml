@@ -1,0 +1,31 @@
+@startuml
+title Request Flow - Istio with Canary Deployment
+
+actor User
+participant "Ingress Gateway" as Ingress
+participant "VirtualService \n split 90/10" as VS
+participant "app-service v1" as AppV1
+participant "app-service v2" as AppV2
+participant "model-service v1" as ModelV1
+participant "model-service v2" as ModelV2
+
+User -> Ingress : HTTP Request
+Ingress -> VS : Route request
+
+note right
+Sticky sessions ensure users are routed 
+consistently to v1 or v2
+end note
+
+group routing based on sticky sessions [v1 - 90%]
+    VS -> AppV1 : Forward to app-service v1
+    AppV1 -> ModelV1 : REST call
+    ModelV1 --> AppV1 : Prediction result
+    AppV1 --> User : HTTP Response
+else v2 - 10%
+    VS -> AppV2 : Forward to app-service v2
+    AppV2 -> ModelV2 : REST call
+    ModelV2 --> AppV2 : Prediction result
+    AppV2 --> User : HTTP Response
+end
+@enduml
