@@ -18,11 +18,6 @@ This repository contains the deployment and setup for our Restaurant Sentiment A
 4. Insert a review into the text box (i.e. "The selection on the menu was great and so were the prices.")
 5. Press send to get sentiment prediction and give feedback.
    
-### API Documentation
-
-The model-service exposes a REST API for sentiment prediction. You can explore and test it using the automatically generated Swagger UI:
-
- **http://localhost:8081/apidocs**
 
 ---
 
