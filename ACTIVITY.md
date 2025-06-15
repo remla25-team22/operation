@@ -8,6 +8,8 @@ Created PR: https://github.com/remla25-team22/model-training/pull/1  (related to
 
 -- Parviz Ahmadov: --
 
+Approved PR: https://github.com/remla25-team22/lib-ml/pull/1 (Related to A1)
+
 -- Jasper Vos: --
 
  # Week 3:
@@ -35,7 +37,7 @@ Created PR: https://github.com/remla25-team22/operation/pull/2  (related to A2)
 
 -- Parviz Ahmadov: --
 
-Created PR: https://github.com/remla25-team22/lib-ml/pull/3  (related to A1)
+Created PR: https://github.com/remla25-team22/model-service/pull/2 (Related to A1)
 
 Created PR: https://github.com/remla25-team22/lib-ml/pull/4  (related to A1)
 
@@ -82,7 +84,7 @@ Created PR: https://github.com/remla25-team22/operation/pull/4  (related to A2)
 Created PR: https://github.com/remla25-team22/operation/pull/6
 
 
-Approved PR: https://github.com/remla25-team22/operation/pull/5
+Approved PR: https://github.com/remla25-team22/operation/pull/5 (related to A2)
 
 -- Jasper Vos: --
 
@@ -100,15 +102,15 @@ Approved PR: https://github.com/remla25-team22/operation/pull/8  (related to A2)
 
 -- Parviz Ahmadov: --
 
-Created PR: https://github.com/remla25-team22/operation/pull/11
+Created PR: https://github.com/remla25-team22/operation/pull/11 (related to A2)
 
-Created PR: https://github.com/remla25-team22/operation/pull/10
+Created PR: https://github.com/remla25-team22/operation/pull/10 (related to A2)
 
-Created PR: https://github.com/remla25-team22/operation/pull/8
+Created PR: https://github.com/remla25-team22/operation/pull/8 (related to A2)
 
-Created PR: https://github.com/remla25-team22/operation/pull/17  
+Created PR: https://github.com/remla25-team22/operation/pull/17 (related to A3)
 
-Approved PR: https://github.com/remla25-team22/operation/pull/7
+Approved PR: https://github.com/remla25-team22/operation/pull/7 (related to A2)
 
 -- Jasper Vos: --
 
@@ -129,7 +131,7 @@ Approved PR: https://github.com/remla25-team22/operation/pull/17  (related to A3
 
 -- Parviz Ahmadov: --
 
-Created PR: https://github.com/remla25-team22/model-training/pull/3
+Created PR: https://github.com/remla25-team22/model-training/pull/3 (related to A4)
 
 Created PR: https://github.com/remla25-team22/model-training/pull/6 (related to A4)
 
