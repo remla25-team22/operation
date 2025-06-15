@@ -38,7 +38,7 @@ jobs:
 
           # Create and push the new tag
           git tag "$VERSION"
-          git push origin "$VERSION"
+          git push origin "$VERSION" --force
 
       - name: Bump to next patch version
         if: ${{ success() }}
@@ -56,7 +56,7 @@ jobs:
         run: |
           git add VERSION.txt
           git commit -m "Bump version to ${{ env.NEXT_VERSION }} after releasing ${{ env.VERSION }}"
-          git push origin main
+          git push origin main --force
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v1
