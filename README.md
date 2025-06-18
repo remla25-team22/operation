@@ -78,22 +78,39 @@ After provisioning, each team member can SSH into any VM using their registered 
 #### Student 1 (from host machine):
 
 ```bash
-ssh -i ~/.ssh/student1 vagrant@192.168.56.99
+ssh -i ~/.ssh/student1 vagrant@192.168.56.101
 ```
 
 #### Student 2:
 
 ```bash
-ssh -i ~/.ssh/student2 vagrant@192.168.56.101
+ssh -i ~/.ssh/student2 vagrant@192.168.56.102
 ```
 
 > For more nodes, replace the IP with the correct node (`192.168.56.102`, etc.)
 
  No password is required if the public key is registered. Without a registered ssh key a password is required, the default password set by vagrant is `vagrant`.
 
+> Troubleshooting VirtualBox Network Issues
 
+If you encounter errors related to VM networking, static IP assignment, or unreachable VMs (e.g., `ssh: connect to host 192.168.56.100 port 22: No route to host`), it's likely due to broken or conflicting VirtualBox host-only network adapters.
+
+To **automatically fix this**, run the provided script:
+
+```bash
+cd provisioning
+chmod +x fix_virtualbox_hostonly.sh
+./fix_virtualbox_hostonly.sh
+```
+
+After running the script, you can restart your provisioning:
+
+```bash
+vagrant destroy -f
+rm -rf .vagrant
+vagrant up --no-parallel
+```
 ---
-
 
 ##  Project Structure & Pointers
 
