@@ -8,20 +8,19 @@
         path: /etc/kubernetes/kubelet.conf
       register: kubelet_conf
 
+    - name: Wait for API server to become reachable on controller
+      shell: curl -k https://192.168.56.100:6443
+      register: result
+      retries: 10
+      delay: 10
+      until: result.rc == 0
+
     - name: Generate Join Command on controller
-      shell: kubeadm token create --print-join-command
+      ansible.builtin.command: kubeadm token create --print-join-command
       register: join_command
       delegate_to: ctrl
       run_once: true
       changed_when: false
-      when: not kubelet_conf.stat.exists
-
-    - name: Wait for API server to become reachable on controller
-      wait_for:
-        host: 192.168.56.100
-        port: 6443
-        delay: 10
-        timeout: 90
       when: not kubelet_conf.stat.exists
 
     - name: Join the Kubernetes cluster
