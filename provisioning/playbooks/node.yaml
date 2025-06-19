@@ -18,8 +18,9 @@
 
     - name: Wait for API server to become reachable on controller
       wait_for:
-        host: "{{ hostvars['ctrl'].ansible_host | default('192.168.56.100') }}"
+        host: 192.168.56.100
         port: 6443
+        delay: 10
         timeout: 90
       when: not kubelet_conf.stat.exists
 

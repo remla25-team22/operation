@@ -44,12 +44,37 @@ cd ./provisioning
 
 ```bash
 vagrant up --provision
+
+```
+or if you have limited cources:
+```bash
+vagrant up --no-parallel
 ```
 
 This will:
 - Create one controller VM (`ctrl`)
 - Create multiple worker VMs (`node-1`, `node-2`, ...)
 - Run Ansible playbooks to provision the full cluster
+
+> Troubleshooting VirtualBox Network Issues
+
+If you encounter errors related to VM networking, static IP assignment, or unreachable VMs (e.g., `ssh: connect to host 192.168.56.100 port 22: No route to host`), it's likely due to broken or conflicting VirtualBox host-only network adapters.
+
+To **automatically fix this**, run the provided script:
+
+```bash
+cd provisioning
+chmod +x fix_virtualbox_hostonly.sh
+./fix_virtualbox_hostonly.sh
+```
+
+After running the script, you can restart your provisioning:
+
+```bash
+vagrant destroy -f
+rm -rf .vagrant
+vagrant up --no-parallel
+```
 
 #### Reprovision the cluster
 
@@ -91,25 +116,7 @@ ssh -i ~/.ssh/student2 vagrant@192.168.56.102
 
  No password is required if the public key is registered. Without a registered ssh key a password is required, the default password set by vagrant is `vagrant`.
 
-> Troubleshooting VirtualBox Network Issues
 
-If you encounter errors related to VM networking, static IP assignment, or unreachable VMs (e.g., `ssh: connect to host 192.168.56.100 port 22: No route to host`), it's likely due to broken or conflicting VirtualBox host-only network adapters.
-
-To **automatically fix this**, run the provided script:
-
-```bash
-cd provisioning
-chmod +x fix_virtualbox_hostonly.sh
-./fix_virtualbox_hostonly.sh
-```
-
-After running the script, you can restart your provisioning:
-
-```bash
-vagrant destroy -f
-rm -rf .vagrant
-vagrant up --no-parallel
-```
 ---
 
 ##  Project Structure & Pointers
