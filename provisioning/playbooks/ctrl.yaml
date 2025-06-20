@@ -53,8 +53,17 @@
         dest: /tmp/kube-flannel.yml
         mode: '0644'
     
+    - name: Check if Flannel is already applied
+      ansible.builtin.command: kubectl get daemonset kube-flannel -n kube-flannel
+      register: flannel_check
+      failed_when: false
+      changed_when: false
+      environment:
+        KUBECONFIG: /etc/kubernetes/admin.conf
+
     - name: Apply flannel network manifest
       ansible.builtin.command: kubectl apply -f /tmp/kube-flannel.yml
+      when: flannel_check.rc != 0
       environment:
         KUBECONFIG: /etc/kubernetes/admin.conf
 

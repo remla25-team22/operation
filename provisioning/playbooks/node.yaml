@@ -9,11 +9,15 @@
       register: kubelet_conf
 
     - name: Wait for API server to become reachable on controller
-      shell: curl -k https://192.168.56.100:6443
+      ansible.builtin.uri:
+        url: https://192.168.56.100:6443/healthz
+        method: GET
+        status_code: 200
+        validate_certs: no
       register: result
       retries: 10
       delay: 10
-      until: result.rc == 0
+      until: result.status == 200
 
     - name: Generate Join Command on controller
       ansible.builtin.command: kubeadm token create --print-join-command
