@@ -193,5 +193,10 @@ Created PR: https://github.com/remla25-team22/operation/pull/29  (related to A12
 
 -- Parviz Ahmadov: --
 
+Created PR: https://github.com/remla25-team22/model-training/pull/9 (Related to A4)
+
+Reviewed PR: https://github.com/remla25-team22/operation/pull/28 (Related to A2)
+
+Approved PR: https://github.com/remla25-team22/lib-version/pull/4 (Related to A1)
 
 -- Jasper Vos: --
