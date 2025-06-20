@@ -164,6 +164,15 @@ Approved PR: https://github.com/remla25-team22/operation/pull/21
 
 -- Ibrahim Badr: --
 
+Created PR: https://github.com/remla25-team22/model-service/pull/3 (related to A1)
+
+Created PR: https://github.com/remla25-team22/lib-version/pull/4 (related to A1)
+
+Created PR: https://github.com/remla25-team22/operation/pull/27 (related to A1)
+
+Approved PR:  https://github.com/remla25-team22/operation/pull/24 (related to A5)
+
+Approved PR:  https://github.com/remla25-team22/operation/pull/26 (related to A5)
 
 -- Parviz Ahmadov: --
 
@@ -178,6 +187,9 @@ Approved PR: https://github.com/remla25-team22/model-service/pull/3
 
 -- Ibrahim Badr: --
 
+Created PR: https://github.com/remla25-team22/operation/pull/28  (related to A2)
+
+Created PR: https://github.com/remla25-team22/operation/pull/29  (related to A12)
 
 -- Parviz Ahmadov: --
 

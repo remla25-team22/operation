@@ -12,3 +12,4 @@ __pycache__/
 .env
 
 admin.conf
+inventory.cfg

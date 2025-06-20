@@ -14,8 +14,8 @@
 
     - name: Initialize Kubernetes controller with kubeadm if not initialized
       ansible.builtin.shell: |
-        kubeadm init \
-          --apiserver-advertise-address=192.168.56.99 \
+        sudo kubeadm init \
+          --apiserver-advertise-address=192.168.56.100 \
           --node-name=ctrl \
           --pod-network-cidr=10.244.0.0/16 \
           --ignore-preflight-errors=NumCPU
