@@ -13,3 +13,5 @@ __pycache__/
 
 admin.conf
 inventory.cfg
+
+app/charts/*.tgz
