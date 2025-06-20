@@ -1,8 +1,15 @@
 - hosts: all
   become: yes
   tasks:
-    - name: Disable swap
-      shell: swapoff -a
+    - name: Check if swap is enabled
+      ansible.builtin.shell: swapon --summary | grep -q .
+      register: swap_status
+      ignore_errors: yes
+      changed_when: false
+
+    - name: Disable swap if it is enabled
+      ansible.builtin.shell: swapoff -a
+      when: swap_status.rc == 0
 
     - name: Remove swap from /etc/fstab
       lineinfile:
@@ -84,9 +91,19 @@
         state: directory
 
     - name: Generate default containerd config
-      ansible.builtin.shell: containerd config default > /etc/containerd/config.toml
+      ansible.builtin.command: containerd config default
       args:
         creates: /etc/containerd/config.toml
+      register: containerd_default_config
+
+    - name: Write default containerd config to file
+      copy:
+        content: "{{ containerd_default_config.stdout }}"
+        dest: /etc/containerd/config.toml
+        owner: root
+        group: root
+        mode: '0644'
+      when: containerd_default_config is defined
             
     - name: Set containerd lines 
       ansible.builtin.replace:
