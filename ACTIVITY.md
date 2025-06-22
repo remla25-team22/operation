@@ -189,7 +189,9 @@ Approved PR: https://github.com/remla25-team22/model-service/pull/3
 
 Created PR: https://github.com/remla25-team22/operation/pull/28  (related to A2)
 
-Created PR: https://github.com/remla25-team22/operation/pull/29  (related to A12)
+Created PR: https://github.com/remla25-team22/operation/pull/29  (related to A2)
+
+Created PR: https://github.com/remla25-team22/operation/pull/31 (related to A2) 
 
 -- Parviz Ahmadov: --
 
