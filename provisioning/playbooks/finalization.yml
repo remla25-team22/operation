@@ -38,7 +38,7 @@
             namespace: metallb-system
           spec:
             addresses:
-              - 192.168.56.120-192.168.56.130
+              - 192.168.56.90-192.168.56.99
       register: metallb_pool
       retries: 5
       delay: 10
@@ -71,7 +71,7 @@
         values:
           controller:
             service:
-              loadBalancerIP: 192.168.56.121
+              loadBalancerIP: 192.168.56.91
             ingressClassResource:
               name: nginx
               default: true
@@ -213,9 +213,15 @@
         dest: /usr/local/bin/istioctl
         state: link
 
-    - name: Install Istio control plane
+    - name: Copy IstioOperator config for fixed IP
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../../istio/istio-gateway-config.yaml"
+        dest: /tmp/istio-gateway-config.yaml
+        mode: '0644'
+
+    - name: Install Istio control plane with fixed IP
       ansible.builtin.command: >
-        istioctl install -y --set profile=default --kubeconfig=/etc/kubernetes/admin.conf
+        istioctl install -y -f /tmp/istio-gateway-config.yaml --kubeconfig=/etc/kubernetes/admin.conf
       args:
         creates: /etc/istio
 
@@ -243,3 +249,35 @@
       environment:
         KUBECONFIG: "/etc/kubernetes/admin.conf"
 
+    - name: Copy Istio Gateway YAML
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../../istio/gateway.yaml"
+        dest: /tmp/gateway.yaml
+        mode: '0644'
+
+    - name: Copy Istio VirtualService YAML
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../../istio/virtual-service.yaml"
+        dest: /tmp/virtual-service.yaml
+        mode: '0644'
+
+    - name: Copy Istio DestinationRule YAML
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../../istio/destination-rule.yaml"
+        dest: /tmp/destination-rule.yaml
+        mode: '0644'
+
+    - name: Apply Istio Gateway
+      ansible.builtin.command: kubectl apply -f /tmp/gateway.yaml
+      environment:
+        KUBECONFIG: "/etc/kubernetes/admin.conf"
+
+    - name: Apply Istio VirtualService
+      ansible.builtin.command: kubectl apply -f /tmp/virtual-service.yaml
+      environment:
+        KUBECONFIG: "/etc/kubernetes/admin.conf"
+
+    - name: Apply Istio DestinationRule
+      ansible.builtin.command: kubectl apply -f /tmp/destination-rule.yaml
+      environment:
+        KUBECONFIG: "/etc/kubernetes/admin.conf"

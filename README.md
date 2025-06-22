@@ -158,16 +158,22 @@ Each repository includes a `README.md`, tagged release, and is public for peer r
 
 ### Assignment 2 – Provisioning a Kubernetes Cluster
 
-- Created a scalable and configurable `Vagrantfile` using a loop, variables for CPU/memory, and fixed IPs for each VM.
-- Defined 1 controller node (`ctrl`) and 2 worker nodes (`node-1`, `node-2`) on a host-only network (`192.168.56.X`) with full VM-to-VM and host connectivity.
-- Wrote a general Ansible playbook (`general.yaml`) to:
+- Create a scalable and configurable `Vagrantfile` using a loop, variables for CPU/memory, and fixed IPs for each VM.
+- Define 1 controller node (`ctrl`) and 2 worker nodes (`node-1`, `node-2`) on a host-only network (`192.168.56.X`) with full VM-to-VM and host connectivity.
+- Write a general Ansible playbook (`general.yaml`) to:
   - Disable swap and remove `/etc/fstab` entries
   - Load required kernel modules (`br_netfilter`, `overlay`)
   - Set sysctl values for Kubernetes networking (`ip_forward`, `bridge-nf-call-*`)
   - Register multiple students' SSH keys using a loop over the `ssh_keys/` folder
-- Used a dynamic Jinja2 template (`hosts.j2`) to generate `/etc/hosts` based on the number of worker nodes passed via `ansible.extra_vars`
-- Ensured provisioning is idempotent and completes in under 5 minutes.
-- Successfully implemented and validated all provisioning tasks through step 19 of the assignment.
+- Use a dynamic Jinja2 template (`hosts.j2`) to generate `/etc/hosts` based on the number of worker nodes passed via `ansible.extra_vars`
+- Ensure provisioning is idempotent and completes in under 5 minutes.
+- Successfully implemented and validated all provisioning tasks.
+- Finalize the Cluster Setup using: 
+
+```bash
+ansible-playbook -i inventory.cfg playbooks/finalization.yml --limit ctrl
+```
+
 ---
 
 ### Assignment 3 – Kubernetes Services and Monitoring
@@ -204,10 +210,10 @@ helm install my-app ./app
 To make local domain names work, run this command on your host machine:
 
 ```bash
-echo -e "192.168.56.121 app.local
-192.168.56.121 dashboard.local
-192.168.56.121 grafana.local
-192.168.56.121 prometheus.local" | sudo tee -a /etc/hosts
+echo -e "192.168.56.91 app.local
+192.168.56.91 dashboard.local
+192.168.56.91 grafana.local
+192.168.56.91 prometheus.local" | sudo tee -a /etc/hosts
 ```
 
 ---
