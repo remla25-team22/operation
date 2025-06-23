@@ -22,10 +22,7 @@
   "links": [],
   "panels": [
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus_ds"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -74,10 +71,7 @@
       "pluginVersion": "12.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus_ds"
-          },
+      "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "prediction_count",
@@ -93,11 +87,8 @@
       "title": "Total reviews",
       "type": "stat"
     },
-    {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus_ds"
-      },
+    {      
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -164,10 +155,7 @@
       "type": "gauge"
     },
     {
-      "datasource": {
-        "type": "prometheus",
-        "uid": "prometheus_ds"
-      },
+      "datasource": "Prometheus",
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -228,10 +216,7 @@
       "pluginVersion": "12.0.0",
       "targets": [
         {
-          "datasource": {
-            "type": "prometheus",
-            "uid": "prometheus_ds"
-          },
+      "datasource": "Prometheus",
           "disableTextWrap": false,
           "editorMode": "builder",
           "exemplar": false,
