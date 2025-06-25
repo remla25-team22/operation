@@ -215,7 +215,7 @@
 
     - name: Copy IstioOperator config for fixed IP
       ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../../istio/istio-gateway-config.yaml"
+        src: "{{ playbook_dir }}/../../istio-gateway-config.yaml"
         dest: /tmp/istio-gateway-config.yaml
         mode: '0644'
 
@@ -239,6 +239,7 @@
       delay: 10
       until: istio_wait.rc == 0
 
+
     - name: Deploy Prometheus addon
       ansible.builtin.command: kubectl apply -f /opt/istio-1.25.2/samples/addons/prometheus.yaml
       environment:
@@ -246,6 +247,16 @@
 
     - name: Deploy Grafana addon
       ansible.builtin.command: kubectl apply -f /opt/istio-1.25.2/samples/addons/grafana.yaml
+      environment:
+        KUBECONFIG: "/etc/kubernetes/admin.conf"
+
+    - name: Deploy kiali addon
+      ansible.builtin.command: kubectl apply -f /opt/istio-1.25.2/samples/addons/kiali.yaml
+      environment:
+        KUBECONFIG: "/etc/kubernetes/admin.conf"
+        
+    - name: Set instio-injection label to true 
+      ansible.builtin.command: kubectl label namespace default istio-injection=enabled 
       environment:
         KUBECONFIG: "/etc/kubernetes/admin.conf"
 
@@ -266,18 +277,3 @@
         src: "{{ playbook_dir }}/../../istio/destination-rule.yaml"
         dest: /tmp/destination-rule.yaml
         mode: '0644'
-
-    - name: Apply Istio Gateway
-      ansible.builtin.command: kubectl apply -f /tmp/gateway.yaml
-      environment:
-        KUBECONFIG: "/etc/kubernetes/admin.conf"
-
-    - name: Apply Istio VirtualService
-      ansible.builtin.command: kubectl apply -f /tmp/virtual-service.yaml
-      environment:
-        KUBECONFIG: "/etc/kubernetes/admin.conf"
-
-    - name: Apply Istio DestinationRule
-      ansible.builtin.command: kubectl apply -f /tmp/destination-rule.yaml
-      environment:
-        KUBECONFIG: "/etc/kubernetes/admin.conf"
