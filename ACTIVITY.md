@@ -205,7 +205,9 @@ Reviewed PR: https://github.com/remla25-team22/operation/pull/28 (Related to A2)
 Approved PR: https://github.com/remla25-team22/lib-version/pull/4 (Related to A1)
 
 -- Jasper Vos: --
+Created PR: https://github.com/remla25-team22/operation/pull/30 (Related to A3)
 
+Reviewed PR: https://github.com/remla25-team22/model-training/pull/9
 # Week 10: 
 
 -- Ibrahim Badr: --
@@ -215,5 +217,9 @@ Created PR: https://github.com/remla25-team22/model-service/pull/4   (related to
 -- Parviz Ahmadov: --
 
 -- Jasper Vos: --
+
+Created PR: https://github.com/remla25-team22/app-service/pull/7 (Related to A1)
+
+Reviewed PR: https://github.com/remla25-team22/model-service/pull/4
 
 
