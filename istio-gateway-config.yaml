@@ -2,7 +2,14 @@ apiVersion: install.istio.io/v1alpha1
 kind: IstioOperator
 spec:
   profile: default
+
   components:
+    pilot:
+      k8s:
+        env:                            
+        - name: PILOT_ENABLE_PERSISTENT_SESSION_FILTER  
+          value: "true"                
+
     ingressGateways:
     - name: istio-ingressgateway
       enabled: true
@@ -10,17 +17,18 @@ spec:
         service:
           type: LoadBalancer
           loadBalancerIP: 192.168.56.92
-          ports:               # <-- add
-          - port: 80           # HTTP
+          ports:
+          - port: 80           
             name: http
             targetPort: 8080
-          - port: 443          # HTTPS (optional now, handy later)
+          - port: 443          
             name: https
             targetPort: 8443
         resources:
           requests:
             cpu: 100m
             memory: 128Mi
+            
   values:
     global:
       istioNamespace: istio-system

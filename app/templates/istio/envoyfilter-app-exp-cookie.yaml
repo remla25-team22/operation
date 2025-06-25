@@ -1,0 +1,44 @@
+{{- if eq .Values.mode "canary" }}
+apiVersion: networking.istio.io/v1alpha3
+kind: EnvoyFilter
+metadata:
+  name: app-add-exp-cookie
+spec:
+  workloadSelector:
+    labels:
+      # pick the one that matches your gateway; keep only one if you prefer
+      app: istio-ingressgateway
+      # istio: ingressgateway
+  configPatches:
+  - applyTo: HTTP_FILTER
+    match:
+      context: GATEWAY
+      listener:
+        portNumber: 80          # adjust if HTTPS only
+    patch:
+      operation: INSERT_AFTER
+      value:
+        name: envoy.lua
+        typed_config:
+          "@type": type.googleapis.com/envoy.extensions.filters.http.lua.v3.Lua
+          inlineCode: |
+            -- Tag roughly 10 % of first-time users with exp=canary
+            math.randomseed(os.time())
+            local experiment_rate = 0.10
+
+            function envoy_on_response(response_handle)
+              -- skip if cookie already present
+              local set_cookie = response_handle:headers():get("set-cookie") or ""
+              if string.find(set_cookie, "exp=canary") then
+                return
+              end
+
+              if math.random() < experiment_rate then
+                response_handle:headers():add(
+                  "set-cookie",
+                  "exp=canary; Path=/; HttpOnly; SameSite=Lax"
+                )
+              end
+            end
+{{- end }}
+

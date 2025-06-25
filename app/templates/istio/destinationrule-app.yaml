@@ -16,7 +16,7 @@ spec:
       consistentHash:
         httpCookie:
           name: app-session
-          ttl: 600s   # one-hour stickiness
+          ttl: 10s 
 ---
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule

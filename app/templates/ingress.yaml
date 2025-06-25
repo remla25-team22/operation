@@ -25,7 +25,6 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: grafana-ingress
-  namespace: istio-system
   annotations:
     nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
 spec:
@@ -38,7 +37,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: grafana
+                name: {{ .Release.Name }}-grafana
                 port:
                   number: 3000
                 

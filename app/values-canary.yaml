@@ -4,10 +4,8 @@ app:
   versions:
     - name: v1
       image: ghcr.io/remla25-team22/app-service:1.1.6-pre
-      weight: 90
     - name: v2
       image: ghcr.io/remla25-team22/app-service:1.1.6-pre
-      weight: 10
 
 
 model:

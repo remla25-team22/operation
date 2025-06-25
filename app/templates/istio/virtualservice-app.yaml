@@ -7,20 +7,31 @@ spec:
     - app.local
   gateways:
     - app-gateway
+
+{{- if eq .Values.mode "canary" }}
   http:
-{{- if eq .Values.mode "exp" }}
-  # Experiment mode: one destination, no weights → hash sees the full pod pool
-  - route:
-    - destination:
-        host: app-service      # no subset, so v1 and v2 pods are both eligible
+    # 1. Clients that already carry exp=canary -> always v2
+    - match:
+        - headers:
+            cookie:
+              regex: ".*exp=canary.*"
+      route:
+        - destination:
+            host: app-service
+            subset: v2
+          weight: 100
+
+    # 2. Everyone else → baseline v1
+    - route:
+        - destination:
+            host: app-service
+            subset: v1
+          weight: 100
+
 {{- else }}
-  # All other modes: weighted split between subsets
-  - route:
-{{- range .Values.app.versions }}
-    - destination:
-        host: app-service
-        subset: {{ .name }}
-        weight: {{ .weight | default 100 }}
-{{- end }}
+  http:
+    - route:
+        - destination:
+            host: app-service      # no subset, so v1 and v2 pods are both eligible
 {{- end }}
 

@@ -1,5 +1,5 @@
 ingress: { enabled: true }
-mode: exp
+mode: mirror
 app:
   versions:
     - name: v1
