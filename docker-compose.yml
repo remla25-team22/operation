@@ -1,6 +1,6 @@
 services:
   model-service:
-    image: zorsekil:latest
+    image: ghcr.io/remla25-team22/model-service:1.0.15-pre
     container_name: model-service
     environment:
       - MODEL_TAG=v1.0.6-alpha.6
@@ -10,7 +10,7 @@ services:
       - model_cache:/usr/src/app/model_cache
 
   app-service:
-    image: ghcr.io/remla25-team22/app-service:1.0.7-pre
+    image: ghcr.io/remla25-team22/app-service:1.1.6-pre
     container_name: app-service
     ports:
       - "8080:8080"  

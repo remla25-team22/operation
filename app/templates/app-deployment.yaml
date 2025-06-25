@@ -14,10 +14,10 @@ spec:
       labels:
         app: app-service
         version: {{ .name }}
-      annotations:   # <---  ← add here
+      annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/path: "/metrics"   # optional if not "/metrics"
-        prometheus.io/port: "8080"       # optional if port 80/metrics
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "8080"
     spec:
       containers:
       - name: app
