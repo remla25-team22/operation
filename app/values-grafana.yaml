@@ -1,0 +1,22 @@
+grafana:
+  sidecar:
+    dashboards:
+      enabled: true
+      label: grafana_dashboard
+      searchNamespace: ALL
+
+  adminUser: admin
+  adminPassword: admin
+  replicas: 1
+  service:
+    type: ClusterIP
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+        - name: Prometheus
+          type: prometheus
+          access: proxy
+          url: http://prometheus.istio-system.svc.cluster.local:9090
+          isDefault: true
+          uid: prometheus_ds

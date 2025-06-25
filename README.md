@@ -314,7 +314,7 @@ echo -e "192.168.56.92 app.local
 Use the following command to deploy the application with the specified settings:
 
 ```
-helm upgrade --install my-app ../app -f ../app/values-canary.yaml
+helm upgrade --install my-app ../app -f ../app/values-canary.yaml -f app/values-grafana.yaml
 ```
 
 #### Additional Use Case
@@ -324,14 +324,14 @@ helm upgrade --install my-app ../app -f ../app/values-canary.yaml
 
 Use the following commands for the deployment of the app with the specified settings
 ```
-helm upgrade --install my-app ../app -f ../app/values-shadow.yaml
+helm upgrade --install my-app ../app -f ../app/values-shadow.yaml -f app/values-grafana.yaml
 ```
 
 #### Continuous Experimentation
 
 Details can be found in docs/continous-experimentation.md
 ```
-helm upgrade --install my-app ../app -f ../app/values-exp.yaml
+helm upgrade --install my-app ../app -f ../app/values-exp.yaml -f app/values-grafana.yaml
 ```
 
 ##  Activity Log
