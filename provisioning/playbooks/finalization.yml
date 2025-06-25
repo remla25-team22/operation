@@ -260,20 +260,4 @@
       environment:
         KUBECONFIG: "/etc/kubernetes/admin.conf"
 
-    - name: Copy Istio Gateway YAML
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../../istio/gateway.yaml"
-        dest: /tmp/gateway.yaml
-        mode: '0644'
 
-    - name: Copy Istio VirtualService YAML
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../../istio/virtual-service.yaml"
-        dest: /tmp/virtual-service.yaml
-        mode: '0644'
-
-    - name: Copy Istio DestinationRule YAML
-      ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../../istio/destination-rule.yaml"
-        dest: /tmp/destination-rule.yaml
-        mode: '0644'
