@@ -1,0 +1,26 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: app-service
+spec:
+  hosts:
+    - app.local
+  gateways:
+    - app-gateway
+  http:
+{{- if eq .Values.mode "exp" }}
+  # Experiment mode: one destination, no weights → hash sees the full pod pool
+  - route:
+    - destination:
+        host: app-service      # no subset, so v1 and v2 pods are both eligible
+{{- else }}
+  # All other modes: weighted split between subsets
+  - route:
+{{- range .Values.app.versions }}
+    - destination:
+        host: app-service
+        subset: {{ .name }}
+        weight: {{ .weight | default 100 }}
+{{- end }}
+{{- end }}
+

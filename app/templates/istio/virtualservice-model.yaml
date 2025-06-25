@@ -1,0 +1,37 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: model-service
+spec:
+  hosts:
+  - model-service
+  http:
+  {{- if eq .Values.mode "mirror" }}
+  - route:
+    - destination:
+        host: model-service
+        subset: v1
+      weight: 100
+    mirror:
+      host: model-service
+      subset: v2
+    mirrorPercentage:
+      value: 50
+  {{- else }}
+  {{- range .Values.model.versions }}
+  - match:
+    - sourceLabels:
+        version: {{ .name }}
+    route:
+    - destination:
+        host: model-service
+        subset: {{ .name }}
+      weight: 100
+  {{- end }}
+  - route:
+    - destination:
+        host: model-service
+        subset: v1
+      weight: 100
+  {{- end }}
+
