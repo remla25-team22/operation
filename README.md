@@ -318,18 +318,44 @@ flake8 src
 
 > Deploy the app as explained previously then Apply istio.
 
-**Apply istio**
 
+#### Traffic Management with Istio - NEW VERSION
+
+Temporary note: to access the services, run this command: 
 ```bash
-kubectl apply -f istio/
+echo -e "192.168.56.92 app.local
+192.168.56.91 dashboard.local
+192.168.56.91 grafana.local
+192.168.56.91 prometheus.local" | sudo tee -a /etc/hosts
 ```
-> App frontend now routes traffic between v1 and v2 services based on Istio routing rules.
 
-#### Example curl command to test routing:
+- Enabled Istio sidecar injection for the `default` namespace.
+- Two versions (`v1`, `v2`) of both `app-service` and `model-service` have been deployed and synchronized to simulate a canary release scenario.
+- Each deployment is labeled with `version: v1` and `version: v2`.
+- `app/values-canary.yaml` contains configuration variables for virtual services (90% traffic to v1, 10% traffic to v2), destination rules, and related configurations.
+- Sticky session has not been implemented.
 
-```bash
-curl -sk https://app.local/index.html
-curl -sk -H "user: test-v2" https://app.local/index.html
+Use the following command to deploy the application with the specified settings:
+
+```
+helm upgrade --install my-app ../app -f ../app/values-canary.yaml -f ../app/values-grafana.yaml
+```
+
+#### Additional Use Case
+
+- Shadow launch has been implemented
+- 2 versions of `model-service` are deployed, v2 is merely used for mirroring
+
+Use the following commands for the deployment of the app with the specified settings
+```
+helm upgrade --install my-app ../app -f ../app/values-shadow.yaml -f ../app/values-grafana.yaml
+```
+
+#### Continuous Experimentation
+
+Details can be found in docs/continous-experimentation.md
+```
+helm upgrade --install my-app ../app -f ../app/values-exp.yaml -f ../app/values-grafana.yaml
 ```
 
 ##  Activity Log

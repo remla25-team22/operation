@@ -10,7 +10,7 @@ spec:
       app: app-service
       version: {{ .name }}
   template:
-    metadata:
+    metadata:       
       labels:
         app: app-service
         version: {{ .name }}
@@ -20,9 +20,13 @@ spec:
         prometheus.io/port: "8080"
     spec:
       containers:
-        - name: app
-          image: {{ .image }}
-          ports:
-            - containerPort: 8080
+      - name: app
+        image: {{ .image }}
+        ports:
+        - containerPort: 8080
+        env:
+        - name: BackendUrl
+          value: http://model-service:8080
 ---
 {{- end }}
+

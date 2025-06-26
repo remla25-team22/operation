@@ -4,7 +4,7 @@ metadata:
   name: app-gateway
 spec:
   selector:
-    istio: ingressgateway
+    istio: ingressgateway  # targets the Istio ingress gateway
   servers:
     - port:
         number: 80
@@ -12,3 +12,14 @@ spec:
         protocol: HTTP
       hosts:
         - "*"
+    - port:
+        number: 443
+        name: https
+        protocol: HTTPS
+      hosts:
+        - app.local
+      tls:
+        mode: SIMPLE  
+        credentialName: app-credential  
+        minProtocolVersion: TLSV1_2
+

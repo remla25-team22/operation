@@ -1,0 +1,18 @@
+ingress: { enabled: true }
+mode: exp
+app:
+  versions:
+    - name: v1
+      image: ghcr.io/remla25-team22/app-service:1.1.6-pre
+    - name: v2
+      image: ghcr.io/remla25-team22/app-service:1.1.6-pre
+
+model:
+  versions:
+    - name: v1
+      image: ghcr.io/remla25-team22/model-service:1.0.15-pre
+      modeltag: v1.0.6-alpha.6
+    - name: v2
+      image: ghcr.io/remla25-team22/model-service:1.0.15-pre
+      modeltag: v1.0.7
+
