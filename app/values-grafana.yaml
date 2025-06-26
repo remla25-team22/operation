@@ -2,7 +2,7 @@ grafana:
   sidecar:
     dashboards:
       enabled: true
-      label: grafana_dashboard
+      label: zor
       searchNamespace: ALL
 
   adminUser: admin

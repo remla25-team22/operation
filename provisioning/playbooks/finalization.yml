@@ -215,7 +215,7 @@
 
     - name: Copy IstioOperator config for fixed IP
       ansible.builtin.copy:
-        src: "{{ playbook_dir }}/../../istio-gateway-config.yaml"
+        src: "{{ playbook_dir }}/../../istio/istio-gateway-config.yaml"
         dest: /tmp/istio-gateway-config.yaml
         mode: '0644'
 
@@ -239,6 +239,16 @@
       delay: 10
       until: istio_wait.rc == 0
 
+    - name: Copy Istio Gateway YAML
+      ansible.builtin.copy:
+        src: "{{ playbook_dir }}/../../istio/gateway.yaml"
+        dest: /tmp/gateway.yaml
+        mode: '0644'
+        
+    - name: Apply Istio Gateway
+      ansible.builtin.command: kubectl apply -f /tmp/gateway.yaml
+      environment:
+        KUBECONFIG: "/etc/kubernetes/admin.conf"
 
     - name: Deploy Prometheus addon
       ansible.builtin.command: kubectl apply -f /opt/istio-1.25.2/samples/addons/prometheus.yaml
