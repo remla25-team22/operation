@@ -24,7 +24,7 @@
     {
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus_ds"
       },
       "fieldConfig": {
         "defaults": {
@@ -105,7 +105,7 @@
         {
           "datasource": {
             "type": "prometheus",
-            "uid": "PBFA97CFB590B2093"
+            "uid": "prometheus_ds"
           },
           "disableTextWrap": false,
           "editorMode": "builder",
@@ -129,8 +129,8 @@
     "list": []
   },
   "time": {
-    "from": "2025-05-24T20:24:51.276Z",
-    "to": "2025-05-24T20:30:23.622Z"
+    "from": "now-15m",
+    "to": "now"
   },
   "timepicker": {},
   "timezone": "browser",
