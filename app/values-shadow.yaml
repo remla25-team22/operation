@@ -13,5 +13,5 @@ model:
       image: ghcr.io/remla25-team22/model-service:1.0.16-pre
       modeltag: v1.0.6-alpha.6
     - name: v2
-      image: ghcr.io/remla25-team22/model-service:1.0.16-pre
+      image: ghcr.io/remla25-team22/model-service:1.0.17-pre
       modeltag: v1.0.7
