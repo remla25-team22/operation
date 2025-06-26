@@ -210,11 +210,12 @@ helm install my-app ./app
 To make local domain names work, run this command on your host machine:
 
 ```bash
-echo -e "192.168.56.91 app.local
+echo -e "192.168.56.92 app.local
 192.168.56.91 dashboard.local
 192.168.56.91 grafana.local
 192.168.56.91 prometheus.local" | sudo tee -a /etc/hosts
 ```
+NOTE: The reason why the 192.168.56.92 has an ip ending with 92 while the rest with 91 is that the former is bound to the Istio gateway while the rest to the ingress controller.
 
 ---
 
@@ -274,8 +275,6 @@ The table summarizes the implemented tests.
 |                                  | INF-3 (b)| `test_predict_function`                            | Succeeds if `predict` function returns either "positive" or "negative".                                                                                                             |
 |                                  | INF-4    | `test_synonym_swap_invariance`                     | Swaps cleaned synonyms (e.g., *good*→*fine*) in test samples and ensures ≥ 85% output consistency.                                                            |
 | **Monitoring / Non-functional**  | MON-6    | `test_inference_memory_under_500mb`                | Measures peak RAM usage during inference on test data - must stay below 500 MB.                                                                                           |
----
-
 Test adequacy and coverage is measured and reported on the terminal when running the tests, also in the workflow execution.
 
 #### Setup  
@@ -301,6 +300,7 @@ flake8 src
 ```
 
 
+---
 
 ### Assignment 5 – Continuous Experimentation & Istio Service Mesh
 
@@ -321,13 +321,6 @@ flake8 src
 
 #### Traffic Management with Istio - NEW VERSION
 
-Temporary note: to access the services, run this command: 
-```bash
-echo -e "192.168.56.92 app.local
-192.168.56.91 dashboard.local
-192.168.56.91 grafana.local
-192.168.56.91 prometheus.local" | sudo tee -a /etc/hosts
-```
 
 - Enabled Istio sidecar injection for the `default` namespace.
 - Two versions (`v1`, `v2`) of both `app-service` and `model-service` have been deployed and synchronized to simulate a canary release scenario.
@@ -350,13 +343,16 @@ Use the following commands for the deployment of the app with the specified sett
 ```
 helm upgrade --install my-app ../app -f ../app/values-shadow.yaml -f ../app/values-grafana.yaml
 ```
-
 #### Continuous Experimentation
 
 Details can be found in docs/continous-experimentation.md
 ```
 helm upgrade --install my-app ../app -f ../app/values-exp.yaml -f ../app/values-grafana.yaml
 ```
+
+#### Testing
+
+Testing can be done through accessing swagger through http://app.local/swagger/index.html
 
 ##  Activity Log
 
