@@ -56,7 +56,6 @@ The [values file](../app/values.yaml) describes the versions for both the `app-s
 The istio serivce mesh is configured separate from the Helm chart, and performs the following roles:
 
 - **Ingress management**
-    
     A `IngressGateway` is deployed to expose the `app-service` to the outside of the cluster.
 
 - **Routing**
@@ -67,6 +66,8 @@ The istio serivce mesh is configured separate from the Helm chart, and performs 
 
     To ensure a users requests are consistently routed to the same app and model version, sticky sessions are ensured through Istio.
 
+
+
 ## Request flow
 
 1. An incoming (external) request enters the cluster through the Istio defined `Ingress Gateway`
@@ -76,6 +77,16 @@ The istio serivce mesh is configured separate from the Helm chart, and performs 
 5. `app-service` serves the response from `model-service` to the user
 
 ![Traffic flow](img/traffic-diagram.png)
+
+
+The image below illustrates the kiali-based visualization of the request flow:
+
+![Traffic flow](img/traffic-management.png)
+
+There is also a possibility to use shadow launch as described in readme. In that case, the request flow looks like the image below. In this case, the model-service v1 is used to serve the queries, and 50% of the traffic is sent model-service for testing purposes without affecting the user experience.
+
+![Traffic flow](img/shadow.png)
+
 
 
 ## Monitoring
