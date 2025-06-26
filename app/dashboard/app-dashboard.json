@@ -18,11 +18,14 @@
   "editable": true,
   "fiscalYearStartMonth": 0,
   "graphTooltip": 0,
-  "id": 1,
   "links": [],
+  "liveNow": false,
   "panels": [
     {
-      "datasource": "Prometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus_ds"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -33,7 +36,8 @@
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "red",
@@ -50,13 +54,12 @@
         "x": 0,
         "y": 0
       },
-      "id": 1,
+      "id": 4,
       "options": {
-        "colorMode": "value",
-        "graphMode": "none",
-        "justifyMode": "auto",
+        "displayMode": "gradient",
+        "minVizHeight": 10,
+        "minVizWidth": 0,
         "orientation": "auto",
-        "percentChangeColorMode": "standard",
         "reduceOptions": {
           "calcs": [
             "lastNotNull"
@@ -64,17 +67,20 @@
           "fields": "",
           "values": false
         },
-        "showPercentChange": true,
-        "textMode": "auto",
-        "wideLayout": true
+        "showUnfilled": true,
+        "valueMode": "color"
       },
-      "pluginVersion": "12.0.0",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
-      "datasource": "Prometheus",
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus_ds"
+          },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "prediction_count",
+          "expr": "sum by(le) (prediction_response_times_bucket{le!=\"0.0\"})",
+          "format": "heatmap",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "instant": false,
@@ -84,11 +90,14 @@
           "useBackend": false
         }
       ],
-      "title": "Total reviews",
-      "type": "stat"
+      "title": "Number of requests over model response time (s)",
+      "type": "bargauge"
     },
-    {      
-      "datasource": "Prometheus",
+    {
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus_ds"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
@@ -99,7 +108,8 @@
             "mode": "percentage",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
               },
               {
                 "color": "#EAB839",
@@ -137,15 +147,19 @@
         "showThresholdMarkers": true,
         "sizing": "auto"
       },
-      "pluginVersion": "12.0.0",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
+          "datasource": {
+            "type": "prometheus",
+            "uid": "prometheus_ds"
+          },
           "disableTextWrap": false,
           "editorMode": "builder",
           "expr": "incorrect_prediction_rate",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
-          "legendFormat": "__auto",
+          "legendFormat": "{{version}}",
           "range": true,
           "refId": "A",
           "useBackend": false
@@ -155,90 +169,79 @@
       "type": "gauge"
     },
     {
-      "datasource": "Prometheus",
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus_ds"
+      },
       "fieldConfig": {
         "defaults": {
           "color": {
-            "mode": "palette-classic"
+            "mode": "thresholds"
           },
-          "custom": {
-            "fillOpacity": 80,
-            "gradientMode": "none",
-            "hideFrom": {
-              "legend": false,
-              "tooltip": false,
-              "viz": false
-            },
-            "lineWidth": 1,
-            "stacking": {
-              "group": "A",
-              "mode": "none"
-            }
-          },
-          "displayName": "Number of requests",
           "mappings": [],
-          "noValue": "0",
           "thresholds": {
             "mode": "absolute",
             "steps": [
               {
-                "color": "green"
+                "color": "green",
+                "value": null
+              },
+              {
+                "color": "red",
+                "value": 80
               }
             ]
-          },
-          "unit": "none"
+          }
         },
         "overrides": []
       },
       "gridPos": {
         "h": 8,
         "w": 12,
-        "x": 7,
+        "x": 0,
         "y": 8
       },
-      "id": 3,
+      "id": 1,
       "options": {
-        "bucketCount": 20,
-        "bucketSize": 0.05,
-        "combine": false,
-        "legend": {
-          "calcs": [],
-          "displayMode": "list",
-          "placement": "bottom",
-          "showLegend": false
+        "colorMode": "value",
+        "graphMode": "none",
+        "justifyMode": "auto",
+        "orientation": "auto",
+        "percentChangeColorMode": "standard",
+        "reduceOptions": {
+          "calcs": [
+            "lastNotNull"
+          ],
+          "fields": "",
+          "values": false
         },
-        "tooltip": {
-          "hideZeros": false,
-          "mode": "multi",
-          "sort": "none"
-        }
+        "showPercentChange": true,
+        "textMode": "auto",
+        "wideLayout": true
       },
-      "pluginVersion": "12.0.0",
+      "pluginVersion": "10.1.1",
       "targets": [
         {
-      "datasource": "Prometheus",
+          "datasource": "Prometheus",
           "disableTextWrap": false,
-          "editorMode": "builder",
-          "exemplar": false,
-          "expr": "prediction_response_times_bucket{le!=\"0.0\"}",
-          "format": "heatmap",
+          "editorMode": "code",
+          "expr": "prediction_count",
           "fullMetaSearch": false,
-          "hide": false,
           "includeNullMetadata": true,
-          "instant": true,
-          "legendFormat": "{{label_name}}",
-          "range": false,
+          "instant": false,
+          "legendFormat": "{{version}}",
+          "range": true,
           "refId": "A",
           "useBackend": false
         }
       ],
-      "title": "Prediction time / # requests",
-      "type": "histogram"
+      "title": "Total reviews",
+      "type": "stat"
     }
   ],
-  "preload": false,
   "refresh": "5s",
-  "schemaVersion": 41,
+  "schemaVersion": 38,
+  "style": "dark",
   "tags": [],
   "templating": {
     "list": []
@@ -251,5 +254,6 @@
   "timezone": "browser",
   "title": "service-app dashboard",
   "uid": "43652987-c1d8-4485-a022-fe867e283836",
-  "version": 5
+  "version": 1,
+  "weekStart": ""
 }
