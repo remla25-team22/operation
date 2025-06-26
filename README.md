@@ -289,6 +289,7 @@ pip install -e .
 Install the files:
 
 ```
+cd ./.dvc && ./gdrive-access.sh
 dvc pull
 ```
 Run the tests:
