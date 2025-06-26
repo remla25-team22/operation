@@ -245,7 +245,7 @@ echo -e "192.168.56.91 app.local
 - The `model-training` project has been refactored into a modular, Cookiecutter-inspired structure with clearly separated stages: data preparation, training, evaluation, and prediction.
 - A complete DVC pipeline is defined using `dvc.yaml`, allowing full reproducibility via `dvc repro`.
 - Model performance is logged to `metrics.json`, and DVC tracks experiments and metrics using `dvc exp show`.
-- Remote dataset support is built-in — if the raw data is not present locally, it is downloaded from a remote URL in `data_prep.py`.
+- Remote dataset support is built-in — if the raw data is not present locally, it is downloaded from a remote URL (google drive folder) in `data_prep.py`.
 - The pipeline includes:
   - `data_prep.py`: Cleans and prepares text data
   - `train.py`: Trains a Naive Bayes model and serializes it with joblib
@@ -254,16 +254,15 @@ echo -e "192.168.56.91 app.local
     ```bash
     python -m src.predict
     ```
+- Exploratory code is kept in a notebooks folder, production code is kept in src/model-training
+- The model is packaged and automatically published via Github Releases when pushed as a tag.
+- The project applies `pylint` and `flake8` linters with non-default configurations (see files .pylintrc and setup.cfg).
 
-- A virtual environment is used with a `requirements.txt` including all necessary packages like `dvc`, `scikit-learn`, `pylint`, `pytest`, `coverage`, `bandit`, etc.
-- A `.gitignore` has been added to exclude cache, venv, model artifacts, DVC files, and IDE/config files.
-- Testing and CI setup is ongoing:
-  - Unit and metamorphic tests will be added in `tests/`
-  - Linting and test coverage will be integrated using GitHub Actions
 
 #### Testing 
 
 The table summarizes the implemented tests.
+
 | **ML‐Test-Score Category**       | **ID**   | **Test Name (PyTest marker)**                      | **What it checks**                                                                                                                                                                                                 |
 |----------------------------------|----------|----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Feature & Data Integrity**     | FD-1     | `test_data_invariants`                             | Verifies that dataset contains the correct columns (`cleaned`, `Liked`), with proper values.                                                               |
@@ -275,9 +274,32 @@ The table summarizes the implemented tests.
 |                                  | INF-3 (b)| `test_predict_function`                            | Succeeds if `predict` function returns either "positive" or "negative".                                                                                                             |
 |                                  | INF-4    | `test_synonym_swap_invariance`                     | Swaps cleaned synonyms (e.g., *good*→*fine*) in test samples and ensures ≥ 85% output consistency.                                                            |
 | **Monitoring / Non-functional**  | MON-6    | `test_inference_memory_under_500mb`                | Measures peak RAM usage during inference on test data - must stay below 500 MB.                                                                                           |
-
-Continuous Training part has not been implemented yet. Tests can be run with pytest `tests/test_main.py` inside the `model-training` repository. 
 ---
+
+Test adequacy and coverage is measured and reported on the terminal when running the tests, also in the workflow execution.
+
+#### Setup  
+
+To run the tests locally, first clone the [model-training](https://github.com/remla25-team22/model-training) repo and run the following commands:
+
+```
+cd model-training
+pip install -r requirements.txt
+pip install -e .
+```
+Install the files:
+
+```
+dvc pull
+```
+Run the tests:
+
+```
+pytest --cov=src --cov-report=term-missing
+pylint src
+flake8 src
+```
+
 
 
 ### Assignment 5 – Continuous Experimentation & Istio Service Mesh
