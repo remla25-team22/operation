@@ -109,7 +109,7 @@
           },
           "disableTextWrap": false,
           "editorMode": "builder",
-          "expr": "rate(incorrect_prediction_count[$__rate_interval])",
+          "expr": "sum(rate(prediction_count{app=\"app-service\"}[$__rate_interval]))",
           "fullMetaSearch": false,
           "includeNullMetadata": true,
           "legendFormat": "__auto",
