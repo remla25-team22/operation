@@ -1,3 +1,4 @@
+{{- if ne .Values.mode "simple" }}
 apiVersion: networking.istio.io/v1beta1
 kind: DestinationRule
 metadata:
@@ -31,6 +32,7 @@ spec:
   - name: v2
     labels:
       version: v2
+{{- end }}
 
 
 

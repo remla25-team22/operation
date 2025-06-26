@@ -1,3 +1,4 @@
+
 apiVersion: networking.istio.io/v1beta1
 kind: VirtualService
 metadata:
@@ -8,7 +9,13 @@ spec:
   gateways:
     - app-gateway
 
-{{- if eq .Values.mode "canary" }}
+{{- if eq .Values.mode "simple" }}
+  http:
+    - route:
+        - destination:
+            host: app-service  # No subset = regular K8s service
+
+{{- else if eq .Values.mode "canary" }}
   http:
     # 1. Clients that already carry exp=canary -> always v2
     - match:
@@ -34,4 +41,5 @@ spec:
         - destination:
             host: app-service      # no subset, so v1 and v2 pods are both eligible
 {{- end }}
+
 
