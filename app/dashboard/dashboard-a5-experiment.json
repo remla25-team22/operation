@@ -1,12 +1,49 @@
 {
-  "id": 1,
   "type": "timeseries",
-  "title": "Incorrect prediction rate",
+  "title": "Incorrect-prediction-rate",
   "gridPos": {
     "x": 0,
     "y": 0,
-    "h": 8,
-    "w": 12
+    "w": 12,Incorrect-prediction-rate
+    "h": 8{
+  "type": "timeseries",
+  "title": "Incorrect-prediction-rate",
+  "gridPos": {
+    "x": 0,
+    "y": 0,
+    "w": 12,Incorrect-prediction-rate
+    "h": 8
+  },
+  "datasource": {
+    "uid": "prometheus_ds",
+    "type": "prometheus"
+  },
+  "id": 1,
+  "targets": [
+    {
+      "refId": "A",
+      "expr": "avg by (version) (incorrect_prediction_rate)",
+      "range": true,
+      "instant": false,
+      "datasource": {
+        "type": "prometheus",
+        "uid": "prometheus_ds"
+      },
+      "editorMode": "code",
+      "legendFormat": "__auto"
+    }
+  ],
+  "options": {
+    "tooltip": {
+      "mode": "single",
+      "sort": "none"
+    },
+    "legend": {
+      "showLegend": true,
+      "displayMode": "list",
+      "placement": "bottom",
+      "calcs": []
+    }
   },
   "fieldConfig": {
     "defaults": {
@@ -14,7 +51,6 @@
         "drawStyle": "line",
         "lineInterpolation": "linear",
         "barAlignment": 0,
-        "barWidthFactor": 0.6,
         "lineWidth": 1,
         "fillOpacity": 0,
         "gradientMode": "none",
@@ -29,7 +65,6 @@
         "axisPlacement": "auto",
         "axisLabel": "",
         "axisColorMode": "text",
-        "axisBorderShow": false,
         "scaleDistribution": {
           "type": "linear"
         },
@@ -51,36 +86,39 @@
         "mode": "absolute",
         "steps": [
           {
-            "color": "green",
-            "value": null
+            "value": null,
+            "color": "green"
           },
           {
-            "color": "red",
-            "value": 80
+            "value": 80,
+            "color": "red"
           }
         ]
       }
     },
     "overrides": []
+  }
+}
   },
-  "pluginVersion": "11.3.1",
+  "datasource": {
+    "uid": "prometheus_ds",
+    "type": "prometheus"
+  },
+  "id": 1,
   "targets": [
     {
+      "refId": "A",
+      "expr": "avg by (version) (incorrect_prediction_rate)",
+      "range": true,
+      "instant": false,
       "datasource": {
         "type": "prometheus",
-        "uid": "PBFA97CFB590B2093"
+        "uid": "prometheus_ds"
       },
       "editorMode": "code",
-      "expr": "avg by (version) (incorrect_prediction_rate)",
-      "legendFormat": "__auto",
-      "range": true,
-      "refId": "A"
+      "legendFormat": "__auto"
     }
   ],
-  "datasource": {
-    "type": "prometheus",
-    "uid": "PBFA97CFB590B2093"
-  },
   "options": {
     "tooltip": {
       "mode": "single",
@@ -92,5 +130,58 @@
       "placement": "bottom",
       "calcs": []
     }
+  },
+  "fieldConfig": {
+    "defaults": {
+      "custom": {
+        "drawStyle": "line",
+        "lineInterpolation": "linear",
+        "barAlignment": 0,
+        "lineWidth": 1,
+        "fillOpacity": 0,
+        "gradientMode": "none",
+        "spanNulls": false,
+        "insertNulls": false,
+        "showPoints": "auto",
+        "pointSize": 5,
+        "stacking": {
+          "mode": "none",
+          "group": "A"
+        },
+        "axisPlacement": "auto",
+        "axisLabel": "",
+        "axisColorMode": "text",
+        "scaleDistribution": {
+          "type": "linear"
+        },
+        "axisCenteredZero": false,
+        "hideFrom": {
+          "tooltip": false,
+          "viz": false,
+          "legend": false
+        },
+        "thresholdsStyle": {
+          "mode": "off"
+        }
+      },
+      "color": {
+        "mode": "palette-classic"
+      },
+      "mappings": [],
+      "thresholds": {
+        "mode": "absolute",
+        "steps": [
+          {
+            "value": null,
+            "color": "green"
+          },
+          {
+            "value": 80,
+            "color": "red"
+          }
+        ]
+      }
+    },
+    "overrides": []
   }
 }
