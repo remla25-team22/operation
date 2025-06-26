@@ -261,18 +261,20 @@ echo -e "192.168.56.91 app.local
   - Unit and metamorphic tests will be added in `tests/`
   - Linting and test coverage will be integrated using GitHub Actions
 
-
 #### Testing 
 
 The table summarizes the implemented tests.
-| Category                 | Test Description                                                                 |
-|--------------------------|----------------------------------------------------------------------------------|
-| **Feature & Data Integrity** | - Dataset contains `Review` column<br>- No empty reviews                    |
-| **Model Development**       | - Model predicts correct output shape for multiple inputs                   |
-| **ML Infrastructure**       | - Required model files exist (`BoW`, classifier)                             |
-| **Monitoring**              | - Predictions are within valid range `{0, 1}`                                |
-| **Mutamorphic Testing**     | - Synonyms and paraphrases produce consistent predictions                   |
-| **Non-functional Requirements** | - Model inference takes < 0.5 seconds per input                        |
+| **ML‐Test-Score Category**       | **ID**   | **Test Name (PyTest marker)**                      | **What it checks**                                                                                                                                                                                                 |
+|----------------------------------|----------|----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Feature & Data Integrity**     | FD-1     | `test_data_invariants`                             | Verifies that dataset contains the correct columns (`cleaned`, `Liked`), with proper values.                                                               |
+|                                  | FD-2     | `test_feature_benefit_by_coefficients`             | Checks that ≥ 80% of Vectorizer features have significant coefficients (abs > 1e-3).                                                                                        |
+| **Model Development**            | ML-5     | `test_simpler_model_not_better`                    | Ensures the trained model outperforms a majority-class baseline by at least 5 percentage accuracy                                                                                      |
+|                                  | ML-6     | `test_negation_slice_accuracy`                     | Confirms at least 70% accuracy on reviews containing cleaned negation words (e.g., *not*, *never*).                                                                 |
+| **ML Infrastructure**            | INF-1    | `test_determinism`                                 | Runs training five times with different seeds; all must reach ≥ 70% accuracy, proving model stability.                                                                                                  |
+|                                  | INF-3 (a)| `test_full_dvc_pipeline`                           | Full DVC pipeline integration test: verifies the `prepare → train → evaluate` stages produce expected outputs without errors.                                                                                      |
+|                                  | INF-3 (b)| `test_predict_function`                            | Succeeds if `predict` function returns either "positive" or "negative".                                                                                                             |
+|                                  | INF-4    | `test_synonym_swap_invariance`                     | Swaps cleaned synonyms (e.g., *good*→*fine*) in test samples and ensures ≥ 85% output consistency.                                                            |
+| **Monitoring / Non-functional**  | MON-6    | `test_inference_memory_under_500mb`                | Measures peak RAM usage during inference on test data - must stay below 500 MB.                                                                                           |
 
 Continuous Training part has not been implemented yet. Tests can be run with pytest `tests/test_main.py` inside the `model-training` repository. 
 ---
