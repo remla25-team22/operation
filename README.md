@@ -200,7 +200,7 @@ SSH into the controller node and install the Helm chart:
 ```bash
 vagrant ssh ctrl
 cd /vagrant
-helm upgrade --install my-app ../app -f ../app/values-simple.yaml -f ../app/values-grafana.yaml
+helm upgrade --install my-app app -f app/values-simple.yaml -f app/values-grafana.yaml
 ```
 
 ---
