@@ -200,7 +200,7 @@ SSH into the controller node and install the Helm chart:
 ```bash
 vagrant ssh ctrl
 cd /vagrant
-helm install my-app ./app
+helm upgrade --install my-app ../app -f ../app/values-simple.yaml -f ../app/values-grafana.yaml
 ```
 
 ---
@@ -217,6 +217,7 @@ echo -e "192.168.56.92 app.local
 ```
 NOTE: The reason why the 192.168.56.92 has an ip ending with 92 while the rest with 91 is that the former is bound to the Istio gateway while the rest to the ingress controller.
 
+
 ---
 
 #### 4. Access the Services
@@ -225,6 +226,8 @@ NOTE: The reason why the 192.168.56.92 has an ip ending with 92 while the rest w
 -  Grafana: [https://grafana.local](https://grafana.local)
 -  Prometheus: [https://prometheus.local](https://prometheus.local)
 -  Kubernetes Dashboard: [https://dashboard.local](https://dashboard.local)
+
+Grafana can be accessed using `admin` for both username and password, dasboards are loaded in automatically.
 
 > **Dashboard Login Token**: The token is printed at the end of the `finalization.yml` playbook.  
 > If needed, SSH into the controller VM and regenerate it with:
