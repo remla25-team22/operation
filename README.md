@@ -195,12 +195,11 @@ This deploys MetalLB, NGINX Ingress, Istio, Prometheus, Grafana, and the Kuberne
 
 #### 2. Deploy the Application to Kubernetes
 
-SSH into the controller node and install the Helm chart:
+Run the following commands to update the environmental variable and install the Helm chart:
 
 ```bash
-vagrant ssh ctrl
-cd /vagrant
-helm install my-app ./app
+export KUBECONFIG=./admin.conf
+helm upgrade --install my-app ../app -f ../app/values-simple.yaml -f ../app/values-grafana.yaml
 ```
 
 ---
