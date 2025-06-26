@@ -215,6 +215,7 @@ Reviewed PR: https://github.com/remla25-team22/model-training/pull/9
 Created PR: https://github.com/remla25-team22/model-service/pull/4   (related to A1)
 
 -- Parviz Ahmadov: --
+Created PR: https://github.com/remla25-team22/operation/pull/32 (related to A5)
 
 -- Jasper Vos: --
 
