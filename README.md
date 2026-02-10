@@ -1,366 +1,150 @@
-# REMLA Project – Team 22
 
-This repository contains the deployment and setup for our Restaurant Sentiment Analysis web application.
+# Restaurant Sentiment Analysis – MLOps & Kubernetes Deployment
 
----
+This repository contains the end-to-end MLOps pipeline and Kubernetes deployment architecture for a Restaurant Sentiment Analysis web application.
 
-##  How to Start the Application
-
-### Requirements
-- Docker
-- Docker Compose
-
-### Running the application
-
-1. Open terminal in the operation (this folder)
-2. Run `docker compose up`
-3. Using any browser, navigate to [http://localhost:8080/index.html](http://localhost:8080/index.html)
-4. Insert a review into the text box (i.e. "The selection on the menu was great and so were the prices.")
-5. Press send to get sentiment prediction and give feedback.
-   
+The project demonstrates a production-grade Release Engineering setup, featuring **automated provisioning** (Ansible/Vagrant), **container orchestration** (Kubernetes/Helm), **service mesh traffic management** (Istio), and **continuous experimentation** (A/B testing).
 
 ---
 
-###  Running the Kubernetes Cluster (Assignment 2)
+## 🚀 Key Features & Tech Stack
 
-#### Prerequisites
-- VirtualBox
-- Vagrant
-- Ansible
-
-
-All commands related to starting, stopping and provisioning the cluster are to be executed from within the `provisioning` directory. Before exectuing the following commands, change the current directory to the `provisioning` directory using the following command:
-
-```bash
-cd ./provisioning
-```
-
-#### Starting the cluster
-
-```bash
-vagrant up --provision
-
-```
-or if you have limited cources:
-```bash
-vagrant up --no-parallel
-```
-
-This will:
-- Create one controller VM (`ctrl`)
-- Create multiple worker VMs (`node-1`, `node-2`, ...)
-- Run Ansible playbooks to provision the full cluster
-
-> Troubleshooting VirtualBox Network Issues
-
-If you encounter errors related to VM networking, static IP assignment, or unreachable VMs (e.g., `ssh: connect to host 192.168.56.100 port 22: No route to host`), it's likely due to broken or conflicting VirtualBox host-only network adapters.
-
-To **automatically fix this**, run the provided script:
-
-```bash
-cd provisioning
-chmod +x fix_virtualbox_hostonly.sh
-./fix_virtualbox_hostonly.sh
-```
-
-After running the script, you can restart your provisioning:
-
-```bash
-vagrant destroy -f
-rm -rf .vagrant
-vagrant up --no-parallel
-```
-
-#### Reprovision the cluster
-
-```bash
-vagrant provision
-```
-
-#### Stop the cluster
-
-```bash
-vagrant halt
-```
-
-#### Destroy all VMs
-
-```bash
-vagrant destroy -f
-```
+* **Infrastructure:** Kubernetes, Docker, Vagrant, Ansible, Minikube/VirtualBox.
+* **MLOps & Data:** DVC (Data Version Control), Scikit-learn, Joblib.
+* **CI/CD & Deployment:** Helm Charts, GitHub Actions, Istio (Canary & Shadow deployments).
+* **Observability:** Prometheus, Grafana, Kiali.
+* **Testing:** Pytest (Data invariants, model performance verification, determinism checks).
 
 ---
 
-###  SSH Access
+## 🏗 System Architecture
 
-After provisioning, each team member can SSH into any VM using their registered SSH key:
+The system follows a microservice architecture deployed on a Kubernetes cluster.
 
-#### Student 1 (from host machine):
+### Services
+* **App Service:** Frontend and API gateway that handles user requests.
+* **Model Service:** Microservice exposing the trained sentiment analysis model via REST API.
+* **Monitoring Stack:** Prometheus for metrics collection and Grafana for visualization.
+* **Istio Service Mesh:** Manages internal traffic routing, sticky sessions, and ingress.
 
-```bash
-ssh -i ~/.ssh/student1 vagrant@192.168.56.101
-```
+### Cluster Diagram
+The following diagram illustrates the deployment of services within the Kubernetes cluster and the Istio mesh integration:
 
-#### Student 2:
+![Kubernetes Deployment Architecture](docs/img/cluster-diagram.png)
 
-```bash
-ssh -i ~/.ssh/student2 vagrant@192.168.56.102
-```
+---
+## 🧩 Microservices & Component Ecosystem
 
-> For more nodes, replace the IP with the correct node (`192.168.56.102`, etc.)
+The system follows a strictly decoupled architecture to ensure reproducibility and scalability. The logic is distributed across the following repositories:
 
- No password is required if the public key is registered. Without a registered ssh key a password is required, the default password set by vagrant is `vagrant`.
+| Component | Repository | Role & MLOps Significance |
+| :--- | :--- | :--- |
+| **Model Training** | [model-training](https://github.com/remla25-team22/model-training) | **DVC Pipeline.** Manages data versioning, model training, and evaluation. Ensures experiment reproducibility. |
+| **Model Service** | [model-service](https://github.com/remla25-team22/model-service) | **Inference Engine.** Wraps the trained model in a REST API for production serving. Supports canary releases. |
+| **Shared Preprocessing** | [lib-ml](https://github.com/remla25-team22/lib-ml) | **Skew Prevention.** A versioned Python library containing preprocessing logic used by *both* training and inference to prevent **training-serving skew**. |
+| **App Service** | [app-service](https://github.com/remla25-team22/app-service) | **API Gateway.** Backend service that handles routing, user sessions, and forwards requests to the model. |
+| **App Frontend** | [app-frontend](https://github.com/remla25-team22/app-frontend) | **User Interface.** Web interface for users to submit reviews and view sentiment predictions. |
+| **Version Utility** | [lib-version](https://github.com/remla25-team22/lib-version) | **Observability.** Utility library ensuring accurate version tracking and logging across distributed services. |
 
+---
+## 🚦 Traffic Management & Deployment Strategies
+
+This project utilizes **Istio** to handle advanced deployment strategies, moving beyond simple rolling updates.
+
+### Canary Deployments & Sticky Sessions
+To ensure stability when introducing new model versions, we implemented a **Canary Release** strategy:
+1.  **Ingress Gateway:** Receives external HTTP requests.
+2.  **VirtualService:** Splits traffic 90% to `v1` (Stable) and 10% to `v2` (Experimental/Candidate).
+3.  **DestinationRule:** Ensures sticky sessions (via headers/cookies) so users experience consistent model behavior during their session.
+
+![Request Flow - Istio with Canary Deployment](docs/img/traffic-diagram.png)
+
+### Shadow Launching
+In addition to canary releases, the system supports **Shadow Launching**. Traffic is mirrored to a new version of the model service (`v2`) without returning the response to the user. This allows for load testing and error rate verification on production traffic without impacting the user experience.
 
 ---
 
-##  Project Structure & Pointers
+## 🧪 MLOps Pipeline & Automated Testing
 
-This repository contains:
+The machine learning lifecycle is managed via `lib-ml` and `model-training`, ensuring reproducibility and strict quality gates.
 
-- `docker-compose.yml`: Brings up the app and model-service containers
-- `provisioning/Vagrantfile`: Provisions Kubernetes-ready VMs using VirtualBox
-- `provisioning/playbooks/`: Ansible playbooks to configure all VMs
-- `provisioning/templates/hosts.j2`: Jinja2 template for dynamic /etc/hosts generation
-- `README.md`: Overview of deployment setup and instructions
-- `ACTIVITY.md`: Summary of individual team member GitHub contributions (PRs and approvals)
+### 1. Configuration Management (DVC)
+The pipeline is defined in `dvc.yaml`, allowing full reproducibility via `dvc repro`.
+* **Data Prep:** Cleans text and handles remote dataset retrieval.
+* **Training:** Serializes the model using `joblib`.
+* **Evaluation:** Tracks metrics (`metrics.json`) to compare experiments.
 
----
-
-##  Related Repositories
-
-| Component          | Repository                                                             |
-|--------------------|------------------------------------------------------------------------|
-| **App Frontend**            | [app-frontend](https://github.com/remla25-team22/app-frontend)                          |
-| **App Service**            | [app-service](https://github.com/remla25-team22/app-service)                          |
-| **Model Service**  | [model-service](https://github.com/remla25-team22/model-service)      |
-| **Model Training** | [model-training](https://github.com/remla25-team22/model-training)    |
-| **Preprocessing**  | [lib-ml](https://github.com/remla25-team22/lib-ml)                    |
-| **Version Utility**| [lib-version](https://github.com/remla25-team22/lib-version)          |
+### 2. Quality Assurance Suites
+We implement a rigorous testing suite (`pytest`) to prevent model degradation:
+* **Feature Integrity:** Verifies vectorizer vocabulary and dataset schema.
+* **Model Performance:** Ensures the model beats a majority-class baseline and maintains >70% accuracy on negation handling.
+* **Determinism:** Runs training with different seeds to prove stability.
+* **Inference Constraints:** Verifies memory usage stays under 500MB during inference.
 
 ---
 
-## Assignment Progress Log
+## 📊 Continuous Experimentation
 
-### Assignment 1 – Versions, Releases, and Containerization
+We validated the hypothesis that *reducing vectorizer dimensionality from 1000 to 100 features would not significantly degrade prediction accuracy*.
 
-- All required repositories created in the team GitHub organization
-- `lib-ml` and `lib-version` are implemented, versioned via `VERSION.txt`, and installable through GitHub tag
-- Training script uses `lib-ml` for preprocessing; model is saved and versioned, and its tag is passed as an environmental variable
-- `model-service` serves a trained model using a REST API
-- `app` queries the model-service and uses `lib-version` to show version info
-- GitHub Actions workflows created
-- Docker Compose file allows the full system to be deployed locally
+### Design
+* **Baseline (v1):** Full feature set.
+* **Experimental (v2):** Reduced feature set.
+* **Feedback Loop:** User feedback on predictions is scraped by Prometheus.
 
-Each repository includes a `README.md`, tagged release, and is public for peer review.
+### Results
+The dashboard below tracks the `incorrect_prediction_rate` for both versions in real-time.
 
----
+![Incorrect Prediction Rate Dashboard](dashboards/a5-continous-experimentation-dashboard.png)
 
-### Assignment 2 – Provisioning a Kubernetes Cluster
-
-- Create a scalable and configurable `Vagrantfile` using a loop, variables for CPU/memory, and fixed IPs for each VM.
-- Define 1 controller node (`ctrl`) and 2 worker nodes (`node-1`, `node-2`) on a host-only network (`192.168.56.X`) with full VM-to-VM and host connectivity.
-- Write a general Ansible playbook (`general.yaml`) to:
-  - Disable swap and remove `/etc/fstab` entries
-  - Load required kernel modules (`br_netfilter`, `overlay`)
-  - Set sysctl values for Kubernetes networking (`ip_forward`, `bridge-nf-call-*`)
-  - Register multiple students' SSH keys using a loop over the `ssh_keys/` folder
-- Use a dynamic Jinja2 template (`hosts.j2`) to generate `/etc/hosts` based on the number of worker nodes passed via `ansible.extra_vars`
-- Ensure provisioning is idempotent and completes in under 5 minutes.
-- Successfully implemented and validated all provisioning tasks.
-- Finalize the Cluster Setup using: 
-
-```bash
-ansible-playbook -i inventory.cfg playbooks/finalization.yml --limit ctrl
-```
+**Decision Rule:** The experimental version (`v2`) is accepted only if the error rate does not exceed the baseline by more than 2% after 5,000 predictions.
 
 ---
 
-### Assignment 3 – Kubernetes Services and Monitoring
+## 💻 Getting Started
 
-- Migrated from Docker Compose to Kubernetes using Helm.
-- Prometheus and Grafana have been integrated for monitoring; dashboards are available in the `dashboards/` folder.
+### Local Development (Docker Compose)
+For a quick local test without the full Kubernetes cluster:
 
-#### 1. Finalize the Cluster Setup
+1.  Clone the repository.
+2.  Run `docker compose up`.
+3.  Navigate to [http://localhost:8080/index.html](http://localhost:8080/index.html).
+4.  Input a review to see the sentiment prediction.
 
-Run the following playbook:
+### Full Kubernetes Cluster Provisioning
+The `provisioning/` directory contains the IaC (Infrastructure as Code) to spin up a 3-node cluster (1 Controller, 2 Workers).
 
-```bash
-ansible-playbook -i inventory.cfg playbooks/finalization.yml --limit ctrl
-```
+**Prerequisites:** VirtualBox, Vagrant, Ansible.
 
-This deploys MetalLB, NGINX Ingress, Istio, Prometheus, Grafana, and the Kubernetes Dashboard.
-
----
-
-#### 2. Deploy the Application to Kubernetes
-
-Run the following commands to update the environmental variable and install the Helm chart:
-
-```bash
-export KUBECONFIG=./admin.conf
-helm upgrade --install my-app ../app -f ../app/values-simple.yaml -f ../app/values-grafana.yaml
-```
-
----
-
-#### 3. Set Local Host Entries
-
-To make local domain names work, run this command on your host machine:
-
-```bash
-echo -e "192.168.56.92 app.local
-192.168.56.91 dashboard.local
-192.168.56.91 grafana.local
-192.168.56.91 prometheus.local" | sudo tee -a /etc/hosts
-```
-NOTE: The reason why the 192.168.56.92 has an ip ending with 92 while the rest with 91 is that the former is bound to the Istio gateway while the rest to the ingress controller.
-
-
----
-
-#### 4. Access the Services
-
--  App Frontend: [https://app.local/index.html](https://app.local/index.html)
--  Grafana: [https://grafana.local](https://grafana.local)
--  Prometheus: [https://prometheus.local](https://prometheus.local)
--  Kubernetes Dashboard: [https://dashboard.local](https://dashboard.local)
-
-Grafana can be accessed using `admin` for both username and password, dasboards are loaded in automatically.
-
-> **Dashboard Login Token**: The token is printed at the end of the `finalization.yml` playbook.  
-> If needed, SSH into the controller VM and regenerate it with:
->
-> ```bash
-> kubectl -n kubernetes-dashboard create token admin-user
-> ```
----
-
-
-
-
-
-### Assignment 4 – ML Configuration Management and Testing
-
-
-#### ML Configuration Management
-
-- The `model-training` project has been refactored into a modular, Cookiecutter-inspired structure with clearly separated stages: data preparation, training, evaluation, and prediction.
-- A complete DVC pipeline is defined using `dvc.yaml`, allowing full reproducibility via `dvc repro`.
-- Model performance is logged to `metrics.json`, and DVC tracks experiments and metrics using `dvc exp show`.
-- Remote dataset support is built-in — if the raw data is not present locally, it is downloaded from a remote URL (google drive folder) in `data_prep.py`.
-- The pipeline includes:
-  - `data_prep.py`: Cleans and prepares text data
-  - `train.py`: Trains a Naive Bayes model and serializes it with joblib
-  - `evaluate.py`: Evaluates the model and writes metrics
-  - `predict.py`: Accepts custom review input and predicts sentiment interactively. to run it:
+1.  **Provision Infrastructure:**
     ```bash
-    python -m src.predict
+    cd provisioning
+    vagrant up --provision
     ```
-- Exploratory code is kept in a notebooks folder, production code is kept in src/model-training
-- The model is packaged and automatically published via Github Releases when pushed as a tag.
-- The project applies `pylint` and `flake8` linters with non-default configurations (see files .pylintrc and setup.cfg).
+2.  **Finalize Cluster Setup:**
+    ```bash
+    ansible-playbook -i inventory.cfg playbooks/finalization.yml --limit ctrl
+    ```
+    *This installs MetalLB, NGINX Ingress, Istio, Prometheus, and Grafana.*
 
+3.  **Deploy Application (Helm):**
+    ```bash
+    helm upgrade --install my-app ../app -f ../app/values-canary.yaml
+    ```
 
-#### Testing 
+### Accessing Services
+* **App Frontend:** `https://app.local/index.html`
+* **Grafana:** `https://grafana.local` (Default creds: `admin`/`admin`)
+* **Prometheus:** `https://prometheus.local`
 
-The table summarizes the implemented tests.
-
-| **ML‐Test-Score Category**       | **ID**   | **Test Name (PyTest marker)**                      | **What it checks**                                                                                                                                                                                                 |
-|----------------------------------|----------|----------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Feature & Data Integrity**     | FD-1     | `test_data_invariants`                             | Verifies that dataset contains the correct columns (`cleaned`, `Liked`), with proper values.                                                               |
-|                                  | FD-2     | `test_feature_benefit_by_coefficients`             | Checks that ≥ 80% of Vectorizer features have significant coefficients (abs > 1e-3).                                                                                        |
-| **Model Development**            | ML-5     | `test_simpler_model_not_better`                    | Ensures the trained model outperforms a majority-class baseline by at least 5 percentage accuracy                                                                                      |
-|                                  | ML-6     | `test_negation_slice_accuracy`                     | Confirms at least 70% accuracy on reviews containing cleaned negation words (e.g., *not*, *never*).                                                                 |
-| **ML Infrastructure**            | INF-1    | `test_determinism`                                 | Runs training five times with different seeds; all must reach ≥ 70% accuracy, proving model stability.                                                                                                  |
-|                                  | INF-3 (a)| `test_full_dvc_pipeline`                           | Full DVC pipeline integration test: verifies the `prepare → train → evaluate` stages produce expected outputs without errors.                                                                                      |
-|                                  | INF-3 (b)| `test_predict_function`                            | Succeeds if `predict` function returns either "positive" or "negative".                                                                                                             |
-|                                  | INF-4    | `test_synonym_swap_invariance`                     | Swaps cleaned synonyms (e.g., *good*→*fine*) in test samples and ensures ≥ 85% output consistency.                                                            |
-| **Monitoring / Non-functional**  | MON-6    | `test_inference_memory_under_500mb`                | Measures peak RAM usage during inference on test data - must stay below 500 MB.                                                                                           |
-Test adequacy and coverage is measured and reported on the terminal when running the tests, also in the workflow execution.
-
-#### Setup  
-
-To run the tests locally, first clone the [model-training](https://github.com/remla25-team22/model-training) repo and run the following commands:
-
-```
-cd model-training
-pip install -r requirements.txt
-pip install -e .
-```
-Install the files:
-
-```
-cd ./.dvc && ./gdrive-access.sh
-dvc pull
-```
-Run the tests:
-
-```
-pytest --cov=src --cov-report=term-missing
-pylint src
-flake8 src
-```
-
+*(Note: Ensure your `/etc/hosts` file maps the cluster IP `192.168.56.91` to the domains listed above).*
 
 ---
 
-### Assignment 5 – Continuous Experimentation & Istio Service Mesh
+## 📂 Repository Structure
 
-#### Traffic Management with Istio
-
-- Enabled Istio sidecar injection for the `default` namespace.
-- Two versions (`v1`, `v2`) of both `app-service` and `model-service` have been deployed to simulate a canary release scenario.
-- Each deployment is labeled with `version: v1` and `version: v2` respectively.
-- Created the following Istio configuration files in the `istio/` folder:
-  - `gateway.yaml`: Defines an Istio `Gateway` to expose the app externally.
-  - `virtual-service.yaml`: Routes a portion of traffic to the `v2` services (e.g. 90% to v1, 10% to v2).
-  - `destination-rule.yaml`: Defines routing rules per version for sticky sessions.
-- Used sticky session routing via headers to ensure consistent user experience (e.g., based on `user` header).
-- Used curl to test traffic splitting and verify routing behavior.
-
-> Deploy the app as explained previously then Apply istio.
-
-
-#### Traffic Management with Istio - NEW VERSION
-
-
-- Enabled Istio sidecar injection for the `default` namespace.
-- Two versions (`v1`, `v2`) of both `app-service` and `model-service` have been deployed and synchronized to simulate a canary release scenario.
-- Each deployment is labeled with `version: v1` and `version: v2`.
-- `app/values-canary.yaml` contains configuration variables for virtual services (90% traffic to v1, 10% traffic to v2), destination rules, and related configurations.
-- Sticky session has not been implemented.
-
-Use the following command to deploy the application with the specified settings:
-
-```
-helm upgrade --install my-app ../app -f ../app/values-canary.yaml -f ../app/values-grafana.yaml
-```
-
-#### Additional Use Case
-
-- Shadow launch has been implemented
-- 2 versions of `model-service` are deployed, v2 is merely used for mirroring
-
-Use the following commands for the deployment of the app with the specified settings
-```
-helm upgrade --install my-app ../app -f ../app/values-shadow.yaml -f ../app/values-grafana.yaml
-```
-#### Continuous Experimentation
-
-Details can be found in docs/continous-experimentation.md
-```
-helm upgrade --install my-app ../app -f ../app/values-exp.yaml -f ../app/values-grafana.yaml
-```
-
-#### Testing
-
-Testing can be done through accessing swagger through http://app.local/swagger/index.html
-
-##  Activity Log
-
-See [ACTIVITY.md](./ACTIVITY.md) for individual PR links, and approvals.
-
-
----
-
+* `app/`: Helm charts for Kubernetes deployment.
+* `provisioning/`: Vagrantfiles and Ansible playbooks for cluster creation.
+* `istio/`: VirtualServices, Gateways, and DestinationRules configuration.
+* `model-training/`: DVC pipeline, training scripts, and unit tests.
+* `docker-compose.yml`: Local development orchestration.
