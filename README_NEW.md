@@ -94,7 +94,7 @@ We validated the hypothesis that *reducing vectorizer dimensionality from 1000 t
 ### Results
 The dashboard below tracks the `incorrect_prediction_rate` for both versions in real-time.
 
-![Incorrect Prediction Rate Dashboard](image_1c1cfc.png)
+![Incorrect Prediction Rate Dashboard](dashboards/a5-continous-experimentation-dashboard.png)
 
 **Decision Rule:** The experimental version (`v2`) is accepted only if the error rate does not exceed the baseline by more than 2% after 5,000 predictions.
 
