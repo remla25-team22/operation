@@ -7,7 +7,7 @@ The project demonstrates a production-grade Release Engineering setup, featuring
 
 ---
 
-## 🚀 Key Features & Tech Stack
+## Key Features & Tech Stack
 
 * **Infrastructure:** Kubernetes, Docker, Vagrant, Ansible, Minikube/VirtualBox.
 * **MLOps & Data:** DVC (Data Version Control), Scikit-learn, Joblib.
@@ -17,7 +17,7 @@ The project demonstrates a production-grade Release Engineering setup, featuring
 
 ---
 
-## 🏗 System Architecture
+## System Architecture
 
 The system follows a microservice architecture deployed on a Kubernetes cluster.
 
@@ -33,7 +33,7 @@ The following diagram illustrates the deployment of services within the Kubernet
 ![Kubernetes Deployment Architecture](docs/img/cluster-diagram.png)
 
 ---
-## 🧩 Microservices & Component Ecosystem
+## Microservices & Component Ecosystem
 
 The system follows a strictly decoupled architecture to ensure reproducibility and scalability. The logic is distributed across the following repositories:
 
@@ -47,7 +47,7 @@ The system follows a strictly decoupled architecture to ensure reproducibility a
 | **Version Utility** | [lib-version](https://github.com/remla25-team22/lib-version) | **Observability.** Utility library ensuring accurate version tracking and logging across distributed services. |
 
 ---
-## 🚦 Traffic Management & Deployment Strategies
+## Traffic Management & Deployment Strategies
 
 This project utilizes **Istio** to handle advanced deployment strategies, moving beyond simple rolling updates.
 
@@ -64,7 +64,7 @@ In addition to canary releases, the system supports **Shadow Launching**. Traffi
 
 ---
 
-## 🧪 MLOps Pipeline & Automated Testing
+## MLOps Pipeline & Automated Testing
 
 The machine learning lifecycle is managed via `lib-ml` and `model-training`, ensuring reproducibility and strict quality gates.
 
@@ -83,7 +83,7 @@ We implement a rigorous testing suite (`pytest`) to prevent model degradation:
 
 ---
 
-## 📊 Continuous Experimentation
+## Continuous Experimentation
 
 We validated the hypothesis that *reducing vectorizer dimensionality from 1000 to 100 features would not significantly degrade prediction accuracy*.
 
@@ -101,7 +101,7 @@ The dashboard below tracks the `incorrect_prediction_rate` for both versions in 
 
 ---
 
-## 💻 Getting Started
+## Getting Started
 
 ### Local Development (Docker Compose)
 For a quick local test without the full Kubernetes cluster:
@@ -141,7 +141,7 @@ The `provisioning/` directory contains the IaC (Infrastructure as Code) to spin 
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 * `app/`: Helm charts for Kubernetes deployment.
 * `provisioning/`: Vagrantfiles and Ansible playbooks for cluster creation.
